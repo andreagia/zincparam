@@ -24,8 +24,6 @@ class Readfile extends Component {
                  <input type="file" name="file" onChange={(e) => this.onchange(e)} />
              </div>)
          }
-
-
 }
 
 export default Readfile;

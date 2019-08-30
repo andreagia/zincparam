@@ -1,6 +1,11 @@
 import * as actionType from "./action"
 const initialState = {
-    pdb:[]
+    pdb:[],
+    znm: null,
+    zn1: null,
+    zn2: null,
+    zn3: null,
+    zn4: null
 };
 
 const reducer = (state = initialState, action) => {
@@ -14,8 +19,10 @@ const reducer = (state = initialState, action) => {
             return {
                 pdb: []
             };
+
+        default:
+            return state;
     }
-    return state;
 };
 
 export default reducer;

@@ -1,2 +1,12 @@
 export const ADD_PDB = "ADD_PDB";
 export const RM_PDB = "RM_PDB";
+export const ADD_ZNM = "ADD_ZNM";
+export const ADD_ZN1 = "ADD_ZN1";
+export const ADD_ZN2 = "ADD_ZN2";
+export const ADD_ZN3 = "ADD_ZN3";
+export const ADD_ZN4 = "ADD_ZN4";
+export const RM_ZNM = "RM_ZNM";
+export const RM_ZN1 = "RM_ZN1";
+export const RM_ZN2 = "RM_ZN2";
+export const RM_ZN3 = "RM_ZN3";
+export const RM_ZN4 = "RM_ZN4";

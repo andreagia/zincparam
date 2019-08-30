@@ -1,19 +1,19 @@
 import React, {Component} from 'react';
 import Readfile from '../components/Readfile'
-import checkpdb from "../utils/checkpdb";
+import Nglview from '../components/Nglview';
 import { connect } from 'react-redux';
 import * as actionTypes from  '../components/store/action'
 
 class Pdbparse extends Component {
+
     render() {
-        // if (this.state.pdbmon){
-        //     checkpdb(this.state.pdbmon);
-        // }
+
         return(
 
             <div>
                 <h1> Zn parameter force field </h1>
                 <Readfile addfile={(txt) => this.props.onAddPdb(txt) }>Amber pdb</Readfile>
+                <Nglview key={Math.random().toString(36).substr(2)} pdbfile={this.props.pdb} />;
                 <ul>
                     {this.props.pdb.map(strResult => (
                         <li key={Math.random()} >{strResult}</li>
