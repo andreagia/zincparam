@@ -1,5 +1,6 @@
 export const ADD_PDB = "ADD_PDB";
 export const RM_PDB = "RM_PDB";
+export const CHANGE_OVER = "CHANGE_OVER";
 export const ADD_ZNM = "ADD_ZNM";
 export const ADD_ZN1 = "ADD_ZN1";
 export const ADD_ZN2 = "ADD_ZN2";

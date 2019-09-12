@@ -13,7 +13,8 @@ class Pdbparse extends Component {
             <div>
                 <h1> Zn parameter force field </h1>
                 <Readfile addfile={(txt) => this.props.onAddPdb(txt) }>Amber pdb</Readfile>
-                <Nglview key={Math.random().toString(36).substr(2)} pdbfile={this.props.pdb} />;
+                <Nglview key={Math.random().toString(36).substr(2)} pdbfile={this.props.pdb} />
+
                 <ul>
                     {this.props.pdb.map(strResult => (
                         <li key={Math.random()} >{strResult}</li>

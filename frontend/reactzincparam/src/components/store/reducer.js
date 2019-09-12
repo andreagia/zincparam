@@ -5,7 +5,8 @@ const initialState = {
     zn1: null,
     zn2: null,
     zn3: null,
-    zn4: null
+    zn4: null,
+    ligrepover: "none"
 };
 
 const reducer = (state = initialState, action) => {
@@ -19,7 +20,11 @@ const reducer = (state = initialState, action) => {
             return {
                 pdb: []
             };
-
+        case actionType.CHANGE_OVER:
+            return {
+                ...state,
+                ligrepover: action.result
+            };
         default:
             return state;
     }

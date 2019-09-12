@@ -1,22 +1,54 @@
 import React, {Component} from 'react';
 import * as NGL from 'ngl';
 import checkpdb from "../utils/checkpdb";
-import Printchains from "./printchains";
+import Printchains from "./Printchainsui";
+import ParamTbale from "./ParamTable";
 
 class Nglview extends Component {
     stage = null;
-    rep = null;
+    ligrep1 = null;
+    ligrep2 = null;
+    ligrep3 = null;
+    ligrep4 = null;
+    ligrepzn = null;
+    ligrepover = null;
+    state = {
+        resoverngl: "none",
+        ligrep1: "none",
+        ligrep2: "none",
+        ligrep3: "none",
+        ligrep4: "none",
+        ligrepzn: "none",
+        store1: false,
+        store2: false,
+        store3: false,
+        store4: false,
+        storezn: false
+    };
 
     shouldComponentUpdate(nextProps, nextState) {
         console.log("NGLVIEW shoulddcomponentupdate 1--------------------------------");
-        return this.props.pdbfile !== nextProps.pdbfile
+        return true;
+        //  return this.props.pdbfile !== nextProps.pdbfile
     }
 
     componentDidMount() {
         console.log("NGLVIEW didmount 1");
 
-        if(!this.stage) {
+        const viewover = (over) => {
+            console.log(over);
+            this.setState({resoverngl: over});
+        };
+
+        if (!this.stage) {
             this.stage = new NGL.Stage("viewport");
+            this.stage.signals.hovered.add(function (pickingProxy) {
+                if (pickingProxy && (pickingProxy.atom || pickingProxy.bond)) {
+                    console.log(pickingProxy);
+                    console.log(pickingProxy.atom !== undefined ? pickingProxy.atom.resno : "none");
+                    viewover(pickingProxy.atom !== undefined ? pickingProxy.atom.resno : "none");
+                }
+            })
         }
 
         if (this.props.pdbfile.length > 0) {
@@ -28,7 +60,7 @@ class Nglview extends Component {
             const waitLoadNGL = async (o) => {
                 await o.loadFile(blob, {name: "myProtein", ext: "pdb"});
                 let dd = o.getComponentsByName("myProtein");
-                console.log(dd,o);
+                console.log(dd, o);
                 console.log(dd.list[0].structure);
                 dd.list[0].addRepresentation("cartoon", {colorScheme: "atomindex"});
                 dd.list[0].structure.eachResidue(function (rp) {
@@ -38,15 +70,27 @@ class Nglview extends Component {
                 dd.autoView();
                 console.log(dd);
                 console.log(dd.structure);
-                this.rep = dd.list[0].addRepresentation("ball+stick", {
+                let ballstick = {
                     multipleBond: "symmetric",
-                    colorValue: "grey",
+                    colorValue: "gray",
                     sele: "none",
                     aspectRatio: 1.2,
                     radiusScale: 2.5
-                });
+                };
+                let ballstickred = {
+                    multipleBond: "symmetric",
+                    colorValue: "red",
+                    sele: "none",
+                    aspectRatio: 1.2,
+                    radiusScale: 2.5
+                };
+                this.ligrep1 = dd.list[0].addRepresentation("ball+stick", ballstick);
+                this.ligrep2 = dd.list[0].addRepresentation("ball+stick", ballstick);
+                this.ligrep3 = dd.list[0].addRepresentation("ball+stick", ballstick);
+                this.ligrep4 = dd.list[0].addRepresentation("ball+stick", ballstick);
+                this.ligrepzn = dd.list[0].addRepresentation("ball+stick", ballstick);
+                this.ligrepover = dd.list[0].addRepresentation("ball+stick", ballstickred);
                 console.log(this.rep);
-
                 return "";
             };
             this.rep = waitLoadNGL(this.stage);
@@ -92,26 +136,157 @@ class Nglview extends Component {
     };
 
     showLigand = (sele) => {
-        let dd = this.stage.getComponentsByName("myProtein");
-        let s = dd.list[0].structure;
-        console.log(sele);
-        console.log(s);
-
-        let ligandRepr = dd.list[0].addRepresentation("ball+stick", {
-            multipleBond: "symmetric",
-            colorValue: "grey",
-            sele: "none",
-            aspectRatio: 1.2,
-            radiusScale: 2.5
-        });
-        console.log(this.rep);
-        console.log(ligandRepr);
-        this.rep.setVisibility(true);
-        this.rep.setSelection(sele);
+        this.ligrep1.setVisibility(true);
+        this.ligrep1.setSelection(sele);
         //ligandRepr.setVisibility(true);
         //ligandRepr.setSelection(sele);
-        dd.list[0].autoView()
+    };
 
+    showLigandclickui = (resid, name) => {
+        console.log(`Click nth(${resid}) row of parent, record.name: ${resid} ${name}`);
+        console.log(this.state);
+        this.ligrep1.setVisibility(true);
+        this.ligrep1.setSelection(resid);
+        if(this.state.storezn){
+            this.setState({
+                ...this.state,
+                storezn: false,
+                ligrepzn: resid
+            })
+        } else if(this.state.store1)  {
+            this.setState({
+                ...this.state,
+                store1: false,
+                ligrep1: resid
+            })
+        } else if(this.state.store2)  {
+            this.setState({
+                ...this.state,
+                store2: false,
+                ligrep2: resid
+            })
+        } else if(this.state.store3)  {
+            this.setState({
+                ...this.state,
+                store3: false,
+                ligrep3: resid
+            })
+        } else if(this.state.store4)  {
+            this.setState({
+                ...this.state,
+                store4: false,
+                ligrep4: resid
+            })
+        }
+        //ligandRepr.setVisibility(true);
+        //ligandRepr.setSelection(sele);
+    };
+
+    onmouseover =  (resid, name) => {
+        console.log(`Mouse Over nth(${resid}) row of parent, record.name: ${resid} ${name}`);
+        console.log(this.state);
+        this.ligrep1.setVisibility(true);
+        this.ligrep1.setSelection(resid);
+    };
+
+
+    delselectlig = (lig) => {
+        switch (lig) {
+            case "1":
+                return this.setState({
+                        ...this.state,
+                        ligrep1: "none"
+
+                    }
+                );
+            case "2":
+                return this.setState({
+                        ...this.state,
+                        ligrep2: "none"
+
+                    }
+                );
+            case "3":
+                return this.setState({
+                        ...this.state,
+                        ligrep3: "none"
+
+                    }
+                );
+            case "4":
+                return this.setState({
+                        ...this.state,
+                        ligrep4: "none"
+
+                    }
+                );
+            case "zn":
+                return this.setState({
+                        ...this.state,
+                        ligrepzn: "none"
+
+                    }
+                );
+            default:
+                return null;
+
+        }
+    };
+    selectlig = (lig) => {
+        switch (lig) {
+            case "1":
+                return this.setState({
+                        ...this.state,
+                        ligrep1: "Clink ont table",
+                        store1: true
+                    }
+                );
+            case "2":
+                return this.setState({
+                        ...this.state,
+                    ligrep2: "Clink ont table",
+                    store2: true
+                    }
+                );
+            case "3":
+                return this.setState({
+                        ...this.state,
+                    ligrep3: "Clink ont table",
+                    store3: true
+                    }
+                );
+            case "4":
+                return this.setState({
+                        ...this.state,
+                    ligrep4: "Clink ont table",
+                    store4: true
+                    }
+                );
+            case "zn":
+                return this.setState({
+                        ...this.state,
+                    ligrepzn: "Clink ont table",
+                    storezn: true
+                    }
+                );
+            default:
+                return null;
+
+        }
+    };
+
+    showLigandclick = (record, index, event) => {
+        console.log(`Click nth(${index}) row of parent, record.name: ${record.rna} ${record.rnu}`);
+        this.ligrep1.setVisibility(true);
+        this.ligrep1.setSelection(record.rna);
+        //ligandRepr.setVisibility(true);
+        //ligandRepr.setSelection(sele);
+    };
+    showLigandover = (sele) => {
+        this.ligrepover.setVisibility(true);
+        this.ligrepover.setSelection(sele);
+        //ligandRepr.setVisibility(true);
+        //ligandRepr.setSelection(sele);
     };
     showLigand1 = (sele) => {
         let dd = this.stage.getComponentsByName("myProtein");
@@ -120,7 +295,7 @@ class Nglview extends Component {
         console.log(s);
 
         let ligandRepr = dd.list[0].addRepresentation("ball+stick", {
-          //  visible: true,
+            //  visible: true,
             multipleBond: "symmetric",
             colorValue: "grey",
             sele: "none",
@@ -139,7 +314,9 @@ class Nglview extends Component {
         if (this.props.pdbfile.length > 0) {
             let pdbo = checkpdb(this.props.pdbfile);
             console.log(pdbo.chain);
-            printc = <Printchains chain={new Map(pdbo.chain)} sclick={this.onRowClick} dclick={this.onRowDoubleClick}/>
+            printc =
+                <Printchains chain={new Map(pdbo.chain)} over={this.state.resoverngl} tablemouseover={this.onmouseover} sclick={this.showLigandclickui}
+                             dclick={this.onRowDoubleClick}/>
         }
 
         console.log("NGLVIEW from render");
@@ -159,6 +336,11 @@ class Nglview extends Component {
                 <button onClick={() => this.pippofun("-------PIPPO-------------")}
                         className="btn btn-danger">PIPPO
                 </button>
+                <button onClick={() => this.pippofun("-------PIPPO-------------")}
+                        className="btn btn-danger">{this.state.resoverngl}
+                </button>
+                <ParamTbale ligzn={this.state.ligrepzn} lig1={this.state.ligrep1} lig2={this.state.ligrep2}
+                lig3={this.state.ligrep3} lig4={this.state.ligrep4} delselectlig={this.delselectlig} selectlig={this.selectlig}/>
                 {printc}
             </div>
         )
