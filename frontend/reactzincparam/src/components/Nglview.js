@@ -29,7 +29,7 @@ class Nglview extends Component {
     shouldComponentUpdate(nextProps, nextState) {
         console.log("NGLVIEW shoulddcomponentupdate 1--------------------------------");
         return true;
-        //  return this.props.pdbfile !== nextProps.pdbfile
+          //return this.props.pdbfile !== nextProps.pdbfile
     }
 
     componentDidMount() {
@@ -64,8 +64,8 @@ class Nglview extends Component {
                 console.log(dd.list[0].structure);
                 dd.list[0].addRepresentation("cartoon", {colorScheme: "atomindex"});
                 dd.list[0].structure.eachResidue(function (rp) {
-                    console.log(rp);
-                    console.log(o);
+                  //  console.log(rp);
+                  //  console.log(o);
                 }, new NGL.Selection("polymer and :A"));
                 dd.autoView();
                 console.log(dd);
@@ -84,12 +84,40 @@ class Nglview extends Component {
                     aspectRatio: 1.2,
                     radiusScale: 2.5
                 };
-                this.ligrep1 = dd.list[0].addRepresentation("ball+stick", ballstick);
-                this.ligrep2 = dd.list[0].addRepresentation("ball+stick", ballstick);
-                this.ligrep3 = dd.list[0].addRepresentation("ball+stick", ballstick);
-                this.ligrep4 = dd.list[0].addRepresentation("ball+stick", ballstick);
-                this.ligrepzn = dd.list[0].addRepresentation("ball+stick", ballstick);
-                this.ligrepover = dd.list[0].addRepresentation("ball+stick", ballstickred);
+                let ballstickblue = {
+                    multipleBond: "symmetric",
+                    colorValue: "blue",
+                    sele: "none",
+                    aspectRatio: 1.2,
+                    radiusScale: 2.5
+                };
+                let ballstickyellow = {
+                    multipleBond: "symmetric",
+                    colorValue: "yellow",
+                    sele: "none",
+                    aspectRatio: 1.2,
+                    radiusScale: 2.5
+                };
+                let ballstickgreen = {
+                    multipleBond: "symmetric",
+                    colorValue: "green",
+                    sele: "none",
+                    aspectRatio: 1.2,
+                    radiusScale: 2.5
+                };
+                let ballstickorange = {
+                    multipleBond: "symmetric",
+                    colorValue: "orange",
+                    sele: "none",
+                    aspectRatio: 1.2,
+                    radiusScale: 2.5
+                };
+                this.ligrep1 = dd.list[0].addRepresentation("ball+stick", ballstickred);
+                this.ligrep2 = dd.list[0].addRepresentation("ball+stick", ballstickblue);
+                this.ligrep3 = dd.list[0].addRepresentation("ball+stick", ballstickyellow);
+                this.ligrep4 = dd.list[0].addRepresentation("ball+stick", ballstickgreen);
+                this.ligrepzn = dd.list[0].addRepresentation("ball+stick", ballstickorange);
+                this.ligrepover = dd.list[0].addRepresentation("ball+stick", ballstick);
                 console.log(this.rep);
                 return "";
             };
@@ -145,38 +173,48 @@ class Nglview extends Component {
     showLigandclickui = (resid, name) => {
         console.log(`Click nth(${resid}) row of parent, record.name: ${resid} ${name}`);
         console.log(this.state);
-        this.ligrep1.setVisibility(true);
-        this.ligrep1.setSelection(resid);
+      //  this.ligrep1.setVisibility(true);
+      //  this.ligrep1.setSelection(resid);
         if(this.state.storezn){
             this.setState({
                 ...this.state,
                 storezn: false,
                 ligrepzn: resid
-            })
+            });
+            this.ligrepzn.setVisibility(true);
+            this.ligrepzn.setSelection(resid);
         } else if(this.state.store1)  {
             this.setState({
                 ...this.state,
                 store1: false,
                 ligrep1: resid
-            })
+            });
+            this.ligrep1.setVisibility(true);
+            this.ligrep1.setSelection(resid);
         } else if(this.state.store2)  {
             this.setState({
                 ...this.state,
                 store2: false,
                 ligrep2: resid
-            })
+            });
+            this.ligrep2.setVisibility(true);
+            this.ligrep2.setSelection(resid);
         } else if(this.state.store3)  {
             this.setState({
                 ...this.state,
                 store3: false,
                 ligrep3: resid
-            })
+            });
+            this.ligrep3.setVisibility(true);
+            this.ligrep3.setSelection(resid);
         } else if(this.state.store4)  {
             this.setState({
                 ...this.state,
                 store4: false,
                 ligrep4: resid
-            })
+            });
+            this.ligrep4.setVisibility(true);
+            this.ligrep4.setSelection(resid);
         }
         //ligandRepr.setVisibility(true);
         //ligandRepr.setSelection(sele);
@@ -185,53 +223,64 @@ class Nglview extends Component {
     onmouseover =  (resid, name) => {
         console.log(`Mouse Over nth(${resid}) row of parent, record.name: ${resid} ${name}`);
         console.log(this.state);
-        this.ligrep1.setVisibility(true);
-        this.ligrep1.setSelection(resid);
+        this.ligrepover.setVisibility(true);
+        this.ligrepover.setSelection(resid);
     };
 
 
     delselectlig = (lig) => {
         switch (lig) {
             case "1":
-                return this.setState({
+                 this.setState({
                         ...this.state,
                         ligrep1: "none"
 
                     }
                 );
+                this.ligrep1.setVisibility(false);
+                 break;
             case "2":
-                return this.setState({
+                 this.setState({
                         ...this.state,
                         ligrep2: "none"
 
                     }
                 );
+                this.ligrep2.setVisibility(false);
+                 break;
             case "3":
-                return this.setState({
+                 this.setState({
                         ...this.state,
                         ligrep3: "none"
 
                     }
                 );
+                this.ligrep3.setVisibility(false);
+                 break;
             case "4":
-                return this.setState({
+                 this.setState({
                         ...this.state,
                         ligrep4: "none"
 
                     }
                 );
+                this.ligrep4.setVisibility(false);
+                 break;
             case "zn":
-                return this.setState({
+                 this.setState({
                         ...this.state,
                         ligrepzn: "none"
 
                     }
                 );
+                this.ligrepzn.setVisibility(false);
+                 break;
             default:
                 return null;
 
         }
     };
+
     selectlig = (lig) => {
         switch (lig) {
             case "1":
@@ -308,6 +357,9 @@ class Nglview extends Component {
         dd.list[0].autoView()
 
     };
+
+    componentWillReceiveProps(nextProps, nextContext) {
+    }
 
     render() {
         let printc = null;

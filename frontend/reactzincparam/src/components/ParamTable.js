@@ -12,10 +12,11 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import NavigationIcon from '@material-ui/icons/Navigation';
 import Button from '@material-ui/core/Button';
+import IconButton from "@material-ui/core/IconButton";
 
 const useStyles = makeStyles(theme => ({
     root: {
-        width: '100%',
+        width: '60%',
     },
     paper: {
         marginTop: theme.spacing(3),
@@ -24,7 +25,7 @@ const useStyles = makeStyles(theme => ({
         marginBottom: theme.spacing(2),
     },
     table: {
-        minWidth: 650,
+        minWidth: 300,
     },
     tableRow: {
         backgroundColor: "blue !important"
@@ -40,9 +41,14 @@ const useStyles = makeStyles(theme => ({
     },
     fab: {
         margin: theme.spacing(1),
+       size: "small"
     },
     extendedIcon: {
         marginRight: theme.spacing(1),
+    },
+    smallButton: {
+        margin: theme.spacing.unit,
+        padding: 6
     },
 }));
 
@@ -52,6 +58,13 @@ const ParamTabale = (props) => {
         console.log("Cliccked");
     };
     return (
+<dic>
+    <IconButton className={classes.smallButton} aria-label="Delete">
+        <DeleteIcon fontSize="large" />
+    </IconButton>
+    <Fab size="small" color="secondary" aria-label="edit" className={classes.fab}>
+        <DeleteIcon fontSize="small" />
+    </Fab>
         <Paper className={classes.root}>
             <Table className={classes.table}>
                 <TableHead>
@@ -64,12 +77,12 @@ const ParamTabale = (props) => {
                 </TableHead>
                 <TableBody>
 
-                    <TableRow>
-                        <TableCell>
-                            <Fab color="secondary" aria-label="edit" className={classes.fab}>
-                                <AddIcon onClick={() => props.selectlig("zn")}/>
+                    <TableRow size="small">
+                        <TableCell >
+                            <Fab size="small" color="secondary" aria-label="edit" className={classes.fab}>
+                                <AddIcon fontSize="small" onClick={() => props.selectlig("zn")}/>
                             </Fab>
-                            <Fab disabled={!/[0-9]+/.test(props.ligzn)} aria-label="delete" className={classes.fab}>
+                            <Fab size="small" disabled={!/[0-9]+/.test(props.ligzn)} aria-label="delete" className={classes.fab}>
                                 <DeleteIcon onClick={()=> props.delselectlig("zn")}/>
                             </Fab>
                         </TableCell>
@@ -79,10 +92,10 @@ const ParamTabale = (props) => {
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Fab color="secondary" aria-label="edit" className={classes.fab}>
+                            <Fab size="small" color="secondary" aria-label="edit" className={classes.fab}>
                                 <AddIcon onClick={() => props.selectlig("1")}/>
                             </Fab>
-                            <Fab disabled={!/[0-9]+/.test(props.lig1)} aria-label="delete" className={classes.fab}>
+                            <Fab size="small" disabled={!/[0-9]+/.test(props.lig1)} aria-label="delete" className={classes.fab}>
                                 <DeleteIcon onClick={()=> props.delselectlig("1")}/>
                             </Fab>
                         </TableCell>
@@ -92,10 +105,10 @@ const ParamTabale = (props) => {
                     </TableRow>
                     <TableRow>
                         <TableCell>
-                            <Fab color="secondary" aria-label="edit" className={classes.fab}>
+                            <Fab size="small" color="secondary" aria-label="edit" className={classes.fab}>
                                 <AddIcon onClick={() => props.selectlig("2")}/>
                             </Fab>
-                            <Fab disabled={!/[0-9]+/.test(props.lig2)} aria-label="delete" className={classes.fab}>
+                            <Fab size="small" disabled={!/[0-9]+/.test(props.lig2)} aria-label="delete" className={classes.fab}>
                                 <DeleteIcon onClick={()=> props.delselectlig("2")}/>
                             </Fab>
                         </TableCell>
@@ -106,10 +119,10 @@ const ParamTabale = (props) => {
 
                     <TableRow>
                         <TableCell>
-                            <Fab color="secondary" aria-label="edit" className={classes.fab}>
+                            <Fab size="small" color="secondary" aria-label="edit" className={classes.fab}>
                                 <AddIcon onClick={() => props.selectlig("3")}/>
                             </Fab>
-                            <Fab disabled={!/[0-9]+/.test(props.lig3)} aria-label="delete" className={classes.fab}>
+                            <Fab size="small" disabled={!/[0-9]+/.test(props.lig3)} aria-label="delete" className={classes.fab}>
                                 <DeleteIcon onClick={()=> props.delselectlig("3")}/>
                             </Fab>
                         </TableCell>
@@ -118,11 +131,11 @@ const ParamTabale = (props) => {
                         </TableCell>
                     </TableRow>
                     <TableRow>
-                        <TableCell>
-                            <Fab color="secondary" aria-label="edit" className={classes.fab}>
+                        <TableCell >
+                            <Fab size="small" color="secondary" aria-label="edit" className={classes.fab}>
                                 <AddIcon onClick={() => props.selectlig("4")}/>
                             </Fab>
-                            <Fab disabled={!/[0-9]+/.test(props.lig4)} aria-label="delete" className={classes.fab}>
+                            <Fab size="small" disabled={!/[0-9]+/.test(props.lig4)} aria-label="delete" className={classes.fab}>
                                 <DeleteIcon onClick={()=> props.delselectlig("4")}/>
                             </Fab>
                         </TableCell>
@@ -133,6 +146,7 @@ const ParamTabale = (props) => {
                 </TableBody>
             </Table>
         </Paper>
+</dic>
 
     )
 };

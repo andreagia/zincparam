@@ -1,5 +1,7 @@
 import * as actionType from "./action"
 const initialState = {
+    checkpdb: false,
+    pdbc: [],
     pdb:[],
     znm: null,
     zn1: null,
@@ -15,7 +17,10 @@ const reducer = (state = initialState, action) => {
             return {
                 pdb: [...action.result]
             };
-
+        case actionType.ADD_PDBC:
+            return {
+                pdbc: [...action.result]
+            };
         case actionType.RM_PDB:
             return {
                 pdb: []

@@ -9,7 +9,7 @@ import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles(theme => ({
     root: {
-        width: '100%',
+        width: '60%',
     },
     paper: {
         marginTop: theme.spacing(3),
@@ -18,10 +18,10 @@ const useStyles = makeStyles(theme => ({
         marginBottom: theme.spacing(2),
     },
     table: {
-        minWidth: 650,
+        minWidth: 300,
     },
     tableRow: {
-        backgroundColor: "blue !important"
+        backgroundColor: "white"
     },
     tableRow1: {
         backgroundColor: "red"

@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.4.0",
     "@material-ui/icons": "^4.4.1",
+    "axios": "^0.19.0",
     "material-table": "^1.50.0",
     "ngl": "^2.0.0-dev.36",
     "rc-table": "^6.7.0",
