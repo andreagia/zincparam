@@ -1,4 +1,3 @@
-import axios from "axios";
 
 const checkpdb = (pdb) => {
 
@@ -16,28 +15,6 @@ const checkpdb = (pdb) => {
         prev = rnu;
         return m;
     }, new Map());
-
-
-    let downloadPDB = {
-        filepdb: [...filter1]
-
-    };
-
-    let axiosConfig = {
-        headers: {
-            'Content-Type': 'application/json;charset=UTF-8',
-            "Access-Control-Allow-Origin": "*",
-        }
-    };
-    console.log("----------- POSTDATA --------");
-    console.log(downloadPDB.filepdb);
-    axios.post('http://localhost:8080/restzn/sendpdb', downloadPDB, axiosConfig)
-        .then((res) => {
-            console.log("RESPONSE RECEIVED: ", res);
-        })
-        .catch((err) => {
-            console.log("AXIOS ERROR: ", err);
-        });
 
     return  {
         pdb: [...filter1],

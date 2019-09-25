@@ -12,5 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class DownloadPDB {
     private List<String> filepdb;
+    private List<String> pdbout;
+    private List<String> infoout;
 
 }

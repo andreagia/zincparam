@@ -11,23 +11,10 @@ class Pdbparse extends Component {
     };
 
 
-    checkpdb = (pdb) => {
+    checkpdbinput = (pdb) => {
 
         let filter1 = pdb.filter(a => a.match(/^ATOM/) || a.match(/^END/));
         console.log(filter1);
-        let prev = null;
-        let chain = pdb.filter(a => a.match(/^ATOM/)).reduce((m, a) => {
-            //console.log(a);
-            let rnu = a.slice(22, 26).trim();
-            let rna = a.slice(17, 20).trim();
-            //console.log(a, rnu, rna, m);
-            if (rnu !== prev) {
-                m.set(rnu,rna);
-            }
-            prev = rnu;
-            return m;
-        }, new Map());
-
 
         let downloadPDB = {
             filepdb: [...filter1]
@@ -45,15 +32,14 @@ class Pdbparse extends Component {
         axios.post('http://localhost:8080/restzn/sendpdb', downloadPDB, axiosConfig)
             .then((res) => {
                 console.log("RESPONSE RECEIVED: ", res);
+                console.log(res.data.pdbout);
+                this.props.onAddPdbc(res.data.filepdb);
             })
             .catch((err) => {
                 console.log("AXIOS ERROR: ", err);
             });
 
-        return  {
-            pdb: [...filter1],
-            chain: chain
-        };
+       // this.props.onAddPdb(filter1);
 
     };
 
@@ -62,8 +48,8 @@ class Pdbparse extends Component {
         return(
             <div>
                 <h1> Zn parameter force field </h1>
-                <Readfile addfile={(txt) => this.props.onAddPdb(txt) }>Amber pdb</Readfile>
-                <Nglview key={Math.random().toString(36).substr(2)} pdbfile={this.props.pdb} />
+                <Readfile addfile={(txt) => this.checkpdbinput(txt) }>Amber pdb</Readfile>
+                <Nglview key={Math.random().toString(36).substr(2)} pdbfile={this.props.pdbc} />
 
                 {/*<ul>*/}
                 {/*    {this.props.pdb.map(strResult => (*/}
@@ -77,13 +63,15 @@ class Pdbparse extends Component {
 
 const mapStateToProps = state => {
     return {
-       pdb: state.pdb
+       pdb: state.pdb,
+        pdbc: state.pdbc
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
         onAddPdb: (result) => dispatch({type: actionTypes.ADD_PDB, result: result}),
+        onAddPdbc: (result) => dispatch({type: actionTypes.ADD_PDBC, result: result}),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Pdbparse);
