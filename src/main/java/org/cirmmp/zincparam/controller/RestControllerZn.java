@@ -1,6 +1,7 @@
 package org.cirmmp.zincparam.controller;
 
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.cirmmp.zincparam.model.DownloadPDB;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +39,7 @@ public class RestControllerZn {
     public ResponseEntity runShell(@RequestBody DownloadPDB downloadPDB, HttpServletRequest request) throws Exception {
         List<String> filepdblist = downloadPDB.getFilepdb();
         //filepdblist.forEach(a -> logger.info(a));
-        Pattern pattern = Pattern.compile("^(ATOM|END|TER)+([\\s A-Z a-z 0-9 . -])*");
+        Pattern pattern = Pattern.compile("^(ATOM|END|TER|HETATM)+([\\s A-Z a-z 0-9 . -])*");
        //sanitaze amber pdb input
         List<String> spdb = filepdblist
                 .stream()
@@ -63,15 +64,17 @@ public class RestControllerZn {
         List<String> outpdb = new ArrayList<>();
         List<String> infoout = new ArrayList<>();
 
+        String generatedString = this.tmpdir+RandomStringUtils.randomAlphanumeric(10)+".pdb";
+        Files.write(Paths.get(generatedString), cutspdb);
         //List<String> cmdexe = Arrays.asList("/bin/bash", "/Users/andrea/runpdb4amb.bash" );
-        List<String> cmdexe = Arrays.asList(this.amberhome+"/bin/pdb4amber", this.tmpdir+"/in.pdb");
+        List<String> cmdexe = Arrays.asList(this.amberhome+"/bin/pdb4amber", generatedString);
         //List<String> cmdexe = Arrays.asList("/bin/sh","-c","ls ..");
         ProcessBuilder processBuilder = new ProcessBuilder();
         Map<String, String> envb = processBuilder.environment();
         envb.put("AMBERHOME", this.amberhome);
         envb.put("PYTHONPATH", this.amberhome+"/lib/python2.7/site-packages");
         processBuilder.command(cmdexe);
-        Files.write(Paths.get(this.tmpdir+"/in.pdb"), cutspdb);
+
 
         processBuilder.directory(new File(this.tmpdir));
 
@@ -114,6 +117,9 @@ public class RestControllerZn {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        //delete temporaryfllr
+        Files.delete(Paths.get(generatedString));
 
         logger.info("------ OUTPDB  -------");
         //outpdb.forEach(a -> logger.info(a));

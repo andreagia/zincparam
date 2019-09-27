@@ -4,16 +4,20 @@ import Nglview from '../components/Nglview';
 import { connect } from 'react-redux';
 import * as actionTypes from  '../components/store/action'
 import axios from "axios";
+import Modal from '../components/UI/modal/Modal'
+import Spinner from '../components/UI/spinner/Spinner'
 
 class Pdbparse extends Component {
     state = {
-        checked: false
+        checked: false,
+        loading: false,
+        loadingerror: false
     };
 
 
     checkpdbinput = (pdb) => {
 
-        let filter1 = pdb.filter(a => a.match(/^ATOM/) || a.match(/^END/));
+        let filter1 = pdb.filter(a => a.match(/^(ATOM|HETATM)/) || a.match(/^END/));
         console.log(filter1);
 
         let downloadPDB = {
@@ -27,29 +31,40 @@ class Pdbparse extends Component {
                 "Access-Control-Allow-Origin": "*",
             }
         };
+        this.setState({loading: true});
         console.log("----------- POSTDATA --------");
         console.log(downloadPDB.filepdb);
         axios.post('http://localhost:8080/restzn/sendpdb', downloadPDB, axiosConfig)
             .then((res) => {
                 console.log("RESPONSE RECEIVED: ", res);
                 console.log(res.data.pdbout);
+                this.setState({loading: false});
                 this.props.onAddPdbc(res.data.filepdb);
+
             })
-            .catch((err) => {
-                console.log("AXIOS ERROR: ", err);
+            .catch((err,res) => {
+                console.log("AXIOS ERROR: ", err.response);
+                this.setState({loadingerror: [...err.response.data.infoout]})
             });
 
        // this.props.onAddPdb(filter1);
 
     };
 
+    setClose = () => {
+        this.setState({loading: false})
+    };
 
     render() {
         return(
             <div>
                 <h1> Zn parameter force field </h1>
                 <Readfile addfile={(txt) => this.checkpdbinput(txt) }>Amber pdb</Readfile>
-                <Nglview key={Math.random().toString(36).substr(2)} pdbfile={this.props.pdbc} />
+
+                <Modal open={this.state.loading} error={this.state.loadingerror} setClose={this.setClose}/>
+
+                <Nglview key={Math.random().toString(36).substr(2)} pdbfile={this.props.pdbc}  />
+
 
                 {/*<ul>*/}
                 {/*    {this.props.pdb.map(strResult => (*/}
