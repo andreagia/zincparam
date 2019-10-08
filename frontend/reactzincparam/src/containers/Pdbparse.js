@@ -6,12 +6,16 @@ import * as actionTypes from  '../components/store/action'
 import axios from "axios";
 import Modal from '../components/UI/modal/Modal'
 import Spinner from '../components/UI/spinner/Spinner'
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
 
 class Pdbparse extends Component {
     state = {
         checked: false,
         loading: false,
-        loadingerror: false
+        loadingerror: false,
+        format: "Amber"
     };
 
 
@@ -21,7 +25,8 @@ class Pdbparse extends Component {
         console.log(filter1);
 
         let downloadPDB = {
-            filepdb: [...filter1]
+            filepdb: [...filter1],
+            format: this.state.format
 
         };
 
@@ -55,11 +60,30 @@ class Pdbparse extends Component {
         this.setState({loading: false})
     };
 
+    setformat = (event) => {
+        console.log("-------SETSTATE-------");
+        console.log(event.target.value);
+        this.setState({
+            format: event.target.value
+        })
+
+    };
+
     render() {
         return(
             <div>
                 <h1> Zn parameter force field </h1>
-                <Readfile addfile={(txt) => this.checkpdbinput(txt) }>Amber pdb</Readfile>
+                <InputLabel htmlFor="age-simple">Select program</InputLabel>
+                <Select
+                    value={this.state.format}
+                    onChange={this.setformat}
+
+                >
+                    <MenuItem value={"Amber"}>Amber</MenuItem>
+                    <MenuItem value={"Gromacs"}>Gromacs</MenuItem>
+
+                </Select>
+                <Readfile addfile={(txt) => this.checkpdbinput(txt) }>File pdb</Readfile>
 
                 <Modal open={this.state.loading} error={this.state.loadingerror} setClose={this.setClose}/>
 

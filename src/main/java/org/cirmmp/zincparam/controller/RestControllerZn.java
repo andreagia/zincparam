@@ -3,11 +3,16 @@ package org.cirmmp.zincparam.controller;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.cirmmp.zincparam.model.DownloadPDB;
+import org.cirmmp.zincparam.model.Retpdb;
+import org.cirmmp.zincparam.service.Runamber2pdb;
+import org.cirmmp.zincparam.service.Runpdb2gmx;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,11 +34,11 @@ public class RestControllerZn {
 
     Logger logger = LoggerFactory.getLogger(RestControllerZn.class);
 
-    @Value("${directory.tmp}")
-    private String tmpdir;
+    @Autowired
+    Runamber2pdb runamber2pdb;
 
-    @Value("${directory.amberhome}")
-    private String amberhome;
+    @Autowired
+    Runpdb2gmx runpdb2gmx;
 
     @RequestMapping(value = "sendpdb", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public ResponseEntity runShell(@RequestBody DownloadPDB downloadPDB, HttpServletRequest request) throws Exception {
@@ -60,76 +65,23 @@ public class RestControllerZn {
         //logger.info(filepdblist[0]);
         //logger.info(filepdblist[1]);
 
+        Retpdb retpdb = new Retpdb();
 
-        List<String> outpdb = new ArrayList<>();
-        List<String> infoout = new ArrayList<>();
-
-        String generatedString = this.tmpdir+RandomStringUtils.randomAlphanumeric(10)+".pdb";
-        Files.write(Paths.get(generatedString), cutspdb);
-        //List<String> cmdexe = Arrays.asList("/bin/bash", "/Users/andrea/runpdb4amb.bash" );
-        List<String> cmdexe = Arrays.asList(this.amberhome+"/bin/pdb4amber", generatedString);
-        //List<String> cmdexe = Arrays.asList("/bin/sh","-c","ls ..");
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        Map<String, String> envb = processBuilder.environment();
-        envb.put("AMBERHOME", this.amberhome);
-        envb.put("PYTHONPATH", this.amberhome+"/lib/python2.7/site-packages");
-        processBuilder.command(cmdexe);
-
-
-        processBuilder.directory(new File(this.tmpdir));
-
-        //processBuilder.directory(new File(System.getProperty("user.home")));
-
-        int exitCode = 100;
-        try {
-
-            Process process = processBuilder.start();
-
-            System.out.println("\nPartito ---------> : ");
-            // blocked :(
-            BufferedReader reader =
-                    new BufferedReader(new InputStreamReader(process.getInputStream()));
-
-            BufferedReader errorreader =
-                    new BufferedReader(new InputStreamReader(process.getErrorStream()));
-            String line;
-            System.out.println("\nPartito 2 ---------> : ");
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-               outpdb.add(line);
-
-            }
-            String lineerror;
-            System.out.println("\nPartito ERROR ---------> : ");
-            while ((lineerror = errorreader.readLine()) != null) {
-
-                System.out.println(lineerror);
-                infoout.add(lineerror);
-            }
-            errorreader.close();
-            reader.close();
-
-             exitCode = process.waitFor();
-            System.out.println("\nExited with error code : " + exitCode);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if (downloadPDB.getFormat().equals("Amber")){
+             retpdb = runamber2pdb.run(cutspdb);
+        } else if (downloadPDB.getFormat().equals("Gromacs")){
+            retpdb = runpdb2gmx.run(cutspdb);
         }
-
-        //delete temporaryfllr
-        Files.delete(Paths.get(generatedString));
 
         logger.info("------ OUTPDB  -------");
         //outpdb.forEach(a -> logger.info(a));
-        System.out.println(this.tmpdir);
-        downloadPDB.setPdbout(outpdb);
-        downloadPDB.setInfoout(infoout);
+        //System.out.println(this.tmpdir);
+        downloadPDB.setPdbout(retpdb.getPdbout());
+        downloadPDB.setInfoout(retpdb.getInfoout());
         //downloadPDB.setPdbout(cutspdb);
         //downloadPDB.setPdbout(filepdblist);
        // return ResponseEntity.ok(HttpStatus.OK);
-        if(exitCode == 0){
+        if(retpdb.getExitcode() == 0){
             return ResponseEntity.ok(downloadPDB);
         } else {
             return ResponseEntity.status(404).body(downloadPDB);

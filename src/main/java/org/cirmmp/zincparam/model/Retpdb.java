@@ -1,20 +1,18 @@
 package org.cirmmp.zincparam.model;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
 
-@JsonAutoDetect
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
-public class DownloadPDB {
-    private List<String> filepdb;
+
+public class Retpdb {
+    private List<String> pdbin;
     private List<String> pdbout;
     private List<String> infoout;
-    private String format;
-
-
+    private int exitcode;
 }
