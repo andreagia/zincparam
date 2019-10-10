@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import * as actionTypes from  '../components/store/action'
 import axios from "axios";
 import Modal from '../components/UI/modal/Modal'
-import Spinner from '../components/UI/spinner/Spinner'
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -70,9 +69,16 @@ class Pdbparse extends Component {
     };
 
     render() {
+
+        const pStyle = {
+            fontSize: '15px',
+            textAlign: 'center',
+            color: 'red'
+        };
+
         return(
             <div>
-                <h1> Zn parameter force field </h1>
+                <h1 style={pStyle}> Zn parameter force field </h1>
                 <InputLabel htmlFor="age-simple">Select program</InputLabel>
                 <Select
                     value={this.state.format}
@@ -85,7 +91,7 @@ class Pdbparse extends Component {
                 </Select>
                 <Readfile addfile={(txt) => this.checkpdbinput(txt) }>File pdb</Readfile>
 
-                <Modal open={this.state.loading} error={this.state.loadingerror} setClose={this.setClose}/>
+                <Modal   open={this.state.loading} error={this.state.loadingerror} setClose={this.setClose}/>
 
                 <Nglview key={Math.random().toString(36).substr(2)} pdbfile={this.props.pdbc}  />
 

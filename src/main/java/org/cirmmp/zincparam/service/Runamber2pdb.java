@@ -29,27 +29,24 @@ public class Runamber2pdb {
     @Value("${directory.amberhome}")
     private String amberhome;
 
-    public Retpdb run(List<String> cutspdb) throws Exception{
+    public Retpdb run(List<String> cutspdb) throws Exception {
 
         List<String> outpdb = new ArrayList<>();
 
         List<String> infoout = new ArrayList<>();
 
-        String generatedString = this.tmpdir+ RandomStringUtils.randomAlphanumeric(10)+".pdb";
-        try {
-            Files.write(Paths.get(generatedString), cutspdb);
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
+        String generatedString = this.tmpdir + RandomStringUtils.randomAlphanumeric(10) + ".pdb";
+
+        Files.write(Paths.get(generatedString), cutspdb);
+
         //List<String> cmdexe = Arrays.asList("/bin/bash", "/Users/andrea/runpdb4amb.bash" );
-        List<String> cmdexe = Arrays.asList(this.amberhome+"/bin/pdb4amber", generatedString);
+        List<String> cmdexe = Arrays.asList(this.amberhome + "/bin/pdb4amber", generatedString);
         //List<String> cmdexe = Arrays.asList("/bin/sh","-c","ls ..");
         ProcessBuilder processBuilder = new ProcessBuilder();
         Map<String, String> envb = processBuilder.environment();
         envb.put("AMBERHOME", this.amberhome);
-        envb.put("PYTHONPATH", this.amberhome+"/lib/python2.7/site-packages");
+        envb.put("PYTHONPATH", this.amberhome + "/lib/python2.7/site-packages");
         processBuilder.command(cmdexe);
-
 
         File dir = new File(this.tmpdir);
         if (!dir.exists()) dir.mkdirs();
@@ -59,49 +56,39 @@ public class Runamber2pdb {
         //processBuilder.directory(new File(System.getProperty("user.home")));
 
         int exitCode = 100;
-        try {
+        Process process = processBuilder.start();
 
-            Process process = processBuilder.start();
+        System.out.println("\nPartito ---------> : ");
+        // blocked :(
+        BufferedReader reader =
+                new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-            System.out.println("\nPartito ---------> : ");
-            // blocked :(
-            BufferedReader reader =
-                    new BufferedReader(new InputStreamReader(process.getInputStream()));
+        BufferedReader errorreader =
+                new BufferedReader(new InputStreamReader(process.getErrorStream()));
+        String line;
+        System.out.println("\nPartito 2 ---------> : ");
+        while ((line = reader.readLine()) != null) {
+            System.out.println(line);
+            outpdb.add(line);
 
-            BufferedReader errorreader =
-                    new BufferedReader(new InputStreamReader(process.getErrorStream()));
-            String line;
-            System.out.println("\nPartito 2 ---------> : ");
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-                outpdb.add(line);
-
-            }
-            String lineerror;
-            System.out.println("\nPartito ERROR ---------> : ");
-            while ((lineerror = errorreader.readLine()) != null) {
-
-                System.out.println(lineerror);
-                infoout.add(lineerror);
-            }
-            errorreader.close();
-            reader.close();
-
-            exitCode = process.waitFor();
-            System.out.println("\nExited with error code : " + exitCode);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
+        String lineerror;
+        System.out.println("\nPartito ERROR ---------> : ");
+        while ((lineerror = errorreader.readLine()) != null) {
+
+            System.out.println(lineerror);
+            infoout.add(lineerror);
+        }
+        errorreader.close();
+        reader.close();
+
+        exitCode = process.waitFor();
+        System.out.println("\nExited with error code : " + exitCode);
+
 
         //delete temporaryfllr
-        try {
-            Files.delete(Paths.get(generatedString));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        Files.delete(Paths.get(generatedString));
 
         Retpdb retpdb = new Retpdb();
         retpdb.setExitcode(exitCode);

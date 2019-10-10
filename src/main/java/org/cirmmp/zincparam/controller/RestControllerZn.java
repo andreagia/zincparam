@@ -1,7 +1,5 @@
 package org.cirmmp.zincparam.controller;
 
-
-import org.apache.commons.lang3.RandomStringUtils;
 import org.cirmmp.zincparam.model.DownloadPDB;
 import org.cirmmp.zincparam.model.Retpdb;
 import org.cirmmp.zincparam.service.Runamber2pdb;
@@ -9,20 +7,10 @@ import org.cirmmp.zincparam.service.Runpdb2gmx;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
