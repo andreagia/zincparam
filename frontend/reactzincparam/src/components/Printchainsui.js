@@ -42,8 +42,8 @@ const Printchainsui = (props) => {
     if (props.chain.size > 0) {
 
         props.chain.forEach((name, resid) => {
-            console.log(name, resid);
-            console.log(typeof resid, typeof props.over.toString());
+            //console.log(name, resid);
+            //console.log(typeof resid, typeof props.over.toString());
             rows.push(createData(name, resid))
         });
     }

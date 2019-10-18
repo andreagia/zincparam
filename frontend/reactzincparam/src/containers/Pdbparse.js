@@ -21,7 +21,7 @@ class Pdbparse extends Component {
     checkpdbinput = (pdb) => {
 
         let filter1 = pdb.filter(a => a.match(/^(ATOM|HETATM)/) || a.match(/^END/));
-        console.log(filter1);
+        //console.log(filter1);
 
         let downloadPDB = {
             filepdb: [...filter1],

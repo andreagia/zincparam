@@ -2,7 +2,7 @@
 const checkpdb = (pdb) => {
 
     let filter1 = pdb.filter(a => a.match(/^ATOM/) || a.match(/^END/));
-    console.log(filter1);
+   // console.log(filter1);
     let prev = null;
     let chain = pdb.filter(a => a.match(/^ATOM/)).reduce((m, a) => {
         //console.log(a);

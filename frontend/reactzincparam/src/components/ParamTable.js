@@ -13,6 +13,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import NavigationIcon from '@material-ui/icons/Navigation';
 import Button from '@material-ui/core/Button';
 import IconButton from "@material-ui/core/IconButton";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -41,112 +43,133 @@ const useStyles = makeStyles(theme => ({
     },
     fab: {
         margin: theme.spacing(1),
-       size: "small"
+        size: "small"
     },
     extendedIcon: {
         marginRight: theme.spacing(1),
     },
     smallButton: {
-        margin: theme.spacing.unit,
+        margin: theme.spacing(1),
         padding: 6
     },
 }));
+
 
 const ParamTabale = (props) => {
     const classes = useStyles();
     const click = () => {
         console.log("Cliccked");
     };
+
+    let tabcell;
+    if (props.listMetal.length > 0 ) {
+        tabcell = props.listMetal.map(a =>
+            (
+                <MenuItem key={Object.keys(a)[0]} value={Object.keys(a)[0]}>{Object.keys(a)[0]}</MenuItem>
+            )
+        )
+    }
     return (
-<dic>
-    <IconButton className={classes.smallButton} aria-label="Delete">
-        <DeleteIcon fontSize="large" />
-    </IconButton>
-    <Fab size="small" color="secondary" aria-label="edit" className={classes.fab}>
-        <DeleteIcon fontSize="small" />
-    </Fab>
-        <Paper className={classes.root}>
-            <Table className={classes.table}>
-                <TableHead>
-                    <TableRow>
-                        <TableCell align="right">Action</TableCell>
-                        <TableCell align="right">Resid</TableCell>
-                        <TableCell align="right">Name</TableCell>
+        <div>
+            <IconButton className={classes.smallButton} aria-label="Delete">
+                <DeleteIcon fontSize="large"/>
+            </IconButton>
+            <Fab size="small" color="secondary" aria-label="edit" className={classes.fab}>
+                <DeleteIcon fontSize="small"/>
+            </Fab>
+            <Paper className={classes.root}>
+                <Table className={classes.table}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align="right">Select</TableCell>
+                            <TableCell align="right">Action</TableCell>
+                            <TableCell align="right">Resid</TableCell>
+                            <TableCell align="right">Name</TableCell>
 
-                    </TableRow>
-                </TableHead>
-                <TableBody>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
 
-                    <TableRow size="small">
-                        <TableCell >
-                            <Fab size="small" color="secondary" aria-label="edit" className={classes.fab}>
-                                <AddIcon fontSize="small" onClick={() => props.selectlig("zn")}/>
-                            </Fab>
-                            <Fab size="small" disabled={!/[0-9]+/.test(props.ligzn)} aria-label="delete" className={classes.fab}>
-                                <DeleteIcon onClick={()=> props.delselectlig("zn")}/>
-                            </Fab>
-                        </TableCell>
-                        <TableCell>
-                            {props.ligzn}
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>
-                            <Fab size="small" color="secondary" aria-label="edit" className={classes.fab}>
-                                <AddIcon onClick={() => props.selectlig("1")}/>
-                            </Fab>
-                            <Fab size="small" disabled={!/[0-9]+/.test(props.lig1)} aria-label="delete" className={classes.fab}>
-                                <DeleteIcon onClick={()=> props.delselectlig("1")}/>
-                            </Fab>
-                        </TableCell>
-                        <TableCell>
-                            {props.lig1}
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell>
-                            <Fab size="small" color="secondary" aria-label="edit" className={classes.fab}>
-                                <AddIcon onClick={() => props.selectlig("2")}/>
-                            </Fab>
-                            <Fab size="small" disabled={!/[0-9]+/.test(props.lig2)} aria-label="delete" className={classes.fab}>
-                                <DeleteIcon onClick={()=> props.delselectlig("2")}/>
-                            </Fab>
-                        </TableCell>
-                        <TableCell>
-                            {props.lig2}
-                        </TableCell>
-                    </TableRow>
+                        <TableRow size="small">
+                            <TableCell>
+                                <Select value={"pippo"}>
+                                    {tabcell}
+                                </Select>
+                            </TableCell>
+                            <TableCell>
+                                <Fab size="small" color="secondary" aria-label="edit" className={classes.fab}>
+                                    <AddIcon fontSize="small" onClick={() => props.selectlig("zn")}/>
+                                </Fab>
+                                <Fab size="small" disabled={!/[0-9]+/.test(props.ligzn)} aria-label="delete"
+                                     className={classes.fab}>
+                                    <DeleteIcon onClick={() => props.delselectlig("zn")}/>
+                                </Fab>
+                            </TableCell>
+                            <TableCell>
+                                {props.ligzn}
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>
+                                <Fab size="small" color="secondary" aria-label="edit" className={classes.fab}>
+                                    <AddIcon onClick={() => props.selectlig("1")}/>
+                                </Fab>
+                                <Fab size="small" disabled={!/[0-9]+/.test(props.lig1)} aria-label="delete"
+                                     className={classes.fab}>
+                                    <DeleteIcon onClick={() => props.delselectlig("1")}/>
+                                </Fab>
+                            </TableCell>
+                            <TableCell>
+                                {props.lig1}
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>
+                                <Fab size="small" color="secondary" aria-label="edit" className={classes.fab}>
+                                    <AddIcon onClick={() => props.selectlig("2")}/>
+                                </Fab>
+                                <Fab size="small" disabled={!/[0-9]+/.test(props.lig2)} aria-label="delete"
+                                     className={classes.fab}>
+                                    <DeleteIcon onClick={() => props.delselectlig("2")}/>
+                                </Fab>
+                            </TableCell>
+                            <TableCell>
+                                {props.lig2}
+                            </TableCell>
+                        </TableRow>
 
-                    <TableRow>
-                        <TableCell>
-                            <Fab size="small" color="secondary" aria-label="edit" className={classes.fab}>
-                                <AddIcon onClick={() => props.selectlig("3")}/>
-                            </Fab>
-                            <Fab size="small" disabled={!/[0-9]+/.test(props.lig3)} aria-label="delete" className={classes.fab}>
-                                <DeleteIcon onClick={()=> props.delselectlig("3")}/>
-                            </Fab>
-                        </TableCell>
-                        <TableCell>
-                            {props.lig3}
-                        </TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell >
-                            <Fab size="small" color="secondary" aria-label="edit" className={classes.fab}>
-                                <AddIcon onClick={() => props.selectlig("4")}/>
-                            </Fab>
-                            <Fab size="small" disabled={!/[0-9]+/.test(props.lig4)} aria-label="delete" className={classes.fab}>
-                                <DeleteIcon onClick={()=> props.delselectlig("4")}/>
-                            </Fab>
-                        </TableCell>
-                        <TableCell>
-                            {props.lig4}
-                        </TableCell>
-                    </TableRow>
-                </TableBody>
-            </Table>
-        </Paper>
-</dic>
+                        <TableRow>
+                            <TableCell>
+                                <Fab size="small" color="secondary" aria-label="edit" className={classes.fab}>
+                                    <AddIcon onClick={() => props.selectlig("3")}/>
+                                </Fab>
+                                <Fab size="small" disabled={!/[0-9]+/.test(props.lig3)} aria-label="delete"
+                                     className={classes.fab}>
+                                    <DeleteIcon onClick={() => props.delselectlig("3")}/>
+                                </Fab>
+                            </TableCell>
+                            <TableCell>
+                                {props.lig3}
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>
+                                <Fab size="small" color="secondary" aria-label="edit" className={classes.fab}>
+                                    <AddIcon onClick={() => props.selectlig("4")}/>
+                                </Fab>
+                                <Fab size="small" disabled={!/[0-9]+/.test(props.lig4)} aria-label="delete"
+                                     className={classes.fab}>
+                                    <DeleteIcon onClick={() => props.delselectlig("4")}/>
+                                </Fab>
+                            </TableCell>
+                            <TableCell>
+                                {props.lig4}
+                            </TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </Paper>
+        </div>
 
     )
 };

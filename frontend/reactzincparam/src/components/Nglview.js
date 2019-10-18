@@ -3,6 +3,12 @@ import * as NGL from 'ngl';
 import checkpdb from "../utils/checkpdb";
 import Printchains from "./Printchainsui";
 import ParamTbale from "./ParamTable";
+import calcdistance from "../utils/calcDistance";
+import findMetal from "../utils/findMetal";
+import residueMean from "../utils/residueMean";
+import calcDistanceFromPoint from "../utils/calcDistanceFromPoint";
+import findMin from "../utils/findMin";
+import findNearRes from "../utils/findNearRes";
 
 class Nglview extends Component {
     stage = null;
@@ -23,7 +29,9 @@ class Nglview extends Component {
         store2: false,
         store3: false,
         store4: false,
-        storezn: false
+        storezn: false,
+        pdbfile: [],
+        cma: []
     };
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -53,8 +61,32 @@ class Nglview extends Component {
 
         if (this.props.pdbfile.length > 0) {
             console.log("NGLVIEW didmount 2");
-            let dataArray = this.props.pdbfile.filter(item => item.match('^ATOM') && !item.includes("WAT"));
+           // this.setState({pdbfile: [...this.props.pdbfile]});
+            // let pdblist = [...this.props.pdbfile];
+            // let matrix = calcdistance(pdblist);
+
+            let matrix = calcdistance(this.props.pdbfile);
+            let cma = findMetal(this.props.pdbfile);
+            this.setState({cma: [...cma]});
+            let rsmeam = residueMean(this.props.pdbfile);
+            let dist = calcDistanceFromPoint(rsmeam,[1,1,1]);
+            let slist = findMin(dist);
+            console.log(cma);
+            console.log([rsmeam[Object.keys(cma[0])[0]]]);
+            let nslist = findNearRes(this.props.pdbfile, [rsmeam[Object.keys(cma[0])[0]]]);
+
+            console.log(rsmeam);
+            console.log(cma);
+            console.log(dist);
+            console.log(slist);
+            console.log(nslist);
+            const matchpdb = item => {
+                return ((/^ATOM/.test(item) || /^HETATM/.test(item) || /^TER/.test(item)) && !/HOH/.test(item))
+            };
+            let dataArray = this.props.pdbfile.filter(item => matchpdb(item));
             let retpdb = dataArray.join("\n");
+            console.log("------- RET PDB ---------");
+            console.log(retpdb);
             let blob = new Blob([retpdb], {type: 'text/html'});
 
             const waitLoadNGL = async (o) => {
@@ -358,8 +390,8 @@ class Nglview extends Component {
 
     };
 
-    componentWillReceiveProps(nextProps, nextContext) {
-    }
+   /* componentWillReceiveProps(nextProps, nextContext) {
+    }*/
 
     render() {
         let printc = null;
@@ -370,7 +402,23 @@ class Nglview extends Component {
                 <Printchains chain={new Map(pdbo.chain)} over={this.state.resoverngl} tablemouseover={this.onmouseover} sclick={this.showLigandclickui}
                              dclick={this.onRowDoubleClick}/>
         }
+        let cma;
 
+        if(this.state.pdbfile.length > 0 ){
+            /*let matrix = calcdistance(this.state.pdbfile);
+            let cma = findMetal(this.state.pdbfile);
+            let rsmeam = residueMean(this.state.pdbfile);
+            console.log(rsmeam);
+            let dist = calcDistanceFromPoint(rsmeam,[1,1,1]);
+            let slist = findMin(dist);
+
+            console.log(rsmeam);
+            console.log(cma);
+            console.log(dist);
+            console.log(slist);*/
+            cma = findMetal(this.state.pdbfile);
+            console.log("--------------ggggggg--------",cma);
+        }
         console.log("NGLVIEW from render");
         console.log(this.state);
         return (
@@ -391,7 +439,7 @@ class Nglview extends Component {
                 <button onClick={() => this.pippofun("-------PIPPO-------------")}
                         className="btn btn-danger">{this.state.resoverngl}
                 </button>
-                <ParamTbale ligzn={this.state.ligrepzn} lig1={this.state.ligrep1} lig2={this.state.ligrep2}
+                <ParamTbale listMetal={this.state.cma} ligzn={this.state.ligrepzn} lig1={this.state.ligrep1} lig2={this.state.ligrep2}
                 lig3={this.state.ligrep3} lig4={this.state.ligrep4} delselectlig={this.delselectlig} selectlig={this.selectlig}/>
                 {printc}
             </div>
