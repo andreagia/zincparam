@@ -31,6 +31,7 @@ public class Runamber2pdb {
 
     public Retpdb run(List<String> cutspdb) throws Exception {
 
+
         List<String> outpdb = new ArrayList<>();
 
         List<String> infoout = new ArrayList<>();
@@ -65,27 +66,6 @@ public class Runamber2pdb {
 
         BufferedReader errorreader =
                 new BufferedReader(new InputStreamReader(process.getErrorStream()));
-        String line;
-        System.out.println("\nPartito 2 ---------> : ");
-        while ((line = reader.readLine()) != null) {
-            System.out.println(line);
-            outpdb.add(line);
-
-        }
-        String lineerror;
-        System.out.println("\nPartito ERROR ---------> : ");
-        while ((lineerror = errorreader.readLine()) != null) {
-
-            System.out.println(lineerror);
-            infoout.add(lineerror);
-        }
-        errorreader.close();
-        reader.close();
-
-        exitCode = process.waitFor();
-        System.out.println("\nExited with error code : " + exitCode);
-
-
         //delete temporaryfllr
 
         Files.delete(Paths.get(generatedString));

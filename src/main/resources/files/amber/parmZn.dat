@@ -1,0 +1,36 @@
+SZ 32.06                             sulphur in cystine interacting with Zn(II)
+NZ 14.01                             sp2 N in HIS interacting with Zn(II)
+Zn 65.4                              zinc
+
+
+CR-NZ  488.0    1.335       
+CV-NZ  410.0    1.394       
+CC-NZ  410.0    1.394       
+CT-SZ  237.0    1.810      
+
+
+ 
+H1-CT-SZ    50.0      109.50    
+CT-CT-SZ    50.0      108.60    
+CT-CC-NZ    70.0      120.00   
+H5-CR-NZ    35.0      120.00   
+H4-CV-NZ    35.0      120.00   
+CR-NZ-CV    70.0      117.00   
+NA-CR-NZ    70.0      120.00   
+CC-CV-NZ    70.0      120.00   
+H4-CV-NZ    35.0      120.00   
+CW-CC-NZ    70.0      120.00   
+CC-NZ-CR    70.0      117.00   
+
+
+
+X -CB-NZ-X    2    5.10        180.0             2.         
+X -CC-NZ-X    2    4.80        180.0             2.         
+X -CR-NZ-X    2   10.00        180.0             2.         
+X -CV-NZ-X    2    4.80        180.0             2.         
+NZ-CW-CC-CT   2    1.10        180.0             2. 
+
+
+NZ     1.880    0.1700    
+SZ     2.056    0.2500
+Zn     1.456    0.0125

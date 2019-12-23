@@ -83,7 +83,6 @@ class Pdbparse extends Component {
                 <Select
                     value={this.state.format}
                     onChange={this.setformat}
-
                 >
                     <MenuItem value={"Amber"}>Amber</MenuItem>
                     <MenuItem value={"Gromacs"}>Gromacs</MenuItem>

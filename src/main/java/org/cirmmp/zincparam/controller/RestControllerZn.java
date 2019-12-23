@@ -1,15 +1,23 @@
 package org.cirmmp.zincparam.controller;
 
 import org.cirmmp.zincparam.model.DownloadPDB;
+import org.cirmmp.zincparam.model.ListRetFF;
+import org.cirmmp.zincparam.model.RetFF;
 import org.cirmmp.zincparam.model.Retpdb;
 import org.cirmmp.zincparam.service.Runamber2pdb;
 import org.cirmmp.zincparam.service.Runpdb2gmx;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -22,11 +30,72 @@ public class RestControllerZn {
 
     Logger logger = LoggerFactory.getLogger(RestControllerZn.class);
 
-    @Autowired
-    Runamber2pdb runamber2pdb;
+    private Runamber2pdb runamber2pdb;
 
     @Autowired
-    Runpdb2gmx runpdb2gmx;
+    public void setRunamber2pdb(Runamber2pdb runamber2pdb){
+        this.runamber2pdb = runamber2pdb;
+    }
+    //Runamber2pdb runamber2pdb;
+
+    private Runpdb2gmx runpdb2gmx;
+    @Autowired
+    public void setRunpdb2gmx(Runpdb2gmx runpdb2gmx) {
+        this.runpdb2gmx = runpdb2gmx;
+    }
+
+    @RequestMapping(value = "getFF",method = RequestMethod.GET, produces = "application/json" )
+    public ResponseEntity getff() throws Exception {
+
+       // prog = "AMB";
+        List<String> listfiles = new ArrayList<>();
+        //if (prog.equals( "AMB")) {
+            listfiles.add("all_amino94ildn.txt");
+            listfiles.add("all_aminoct94ildn.txt");
+            listfiles.add("all_aminont94ildn.txt");
+            listfiles.add("CYZHDZHEZ.in");
+            listfiles.add("frcmod.ff99SBildn");
+            listfiles.add("leaprc.ff99SBildn");
+            listfiles.add("parmZn.dat");
+            listfiles.add("leap.in");
+        //}
+
+        List<RetFF> vretff = new ArrayList<>();
+
+        listfiles.forEach((filein)->{
+
+            RetFF retff = new RetFF();
+            Resource expect = new ClassPathResource("files/amber/" + filein);
+            retff.setFilename(filein);
+            try {
+                List<String> fffile = Files.readAllLines(Paths.get(expect.getFile().getAbsolutePath()));
+                retff.setFilecont(fffile);
+                retff.setExitcode(0);
+
+            } catch (Exception e) {
+                logger.info(e.toString());
+                retff.setExitcode(1);
+            }
+
+            vretff.add(retff);
+
+        });
+
+        ListRetFF listretff = new ListRetFF();
+        listretff.setListretff(vretff);
+
+//        Resource expect = new ClassPathResource("files/all_amino03.in");
+//
+//        List<String> fffile = Files.readAllLines(Paths.get(expect.getFile().getAbsolutePath()));
+//
+//        logger.info(fffile.toString());
+//        RetFF retff = new RetFF();
+//
+//        retff.setDataAmber(fffile);
+
+        return ResponseEntity.ok(listretff);
+    }
+
 
     @RequestMapping(value = "sendpdb", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public ResponseEntity runShell(@RequestBody DownloadPDB downloadPDB, HttpServletRequest request) throws Exception {

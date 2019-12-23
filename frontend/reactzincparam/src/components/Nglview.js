@@ -9,6 +9,11 @@ import residueMean from "../utils/residueMean";
 import calcDistanceFromPoint from "../utils/calcDistanceFromPoint";
 import findMin from "../utils/findMin";
 import findNearRes from "../utils/findNearRes";
+import JSZip from "jszip"
+import { saveAs } from 'file-saver';
+import axios from "axios";
+//import * as math from "mathjs/es/entry/impureFunctionsAny.generated";
+import  './Nglview.css';
 
 class Nglview extends Component {
     stage = null;
@@ -25,20 +30,61 @@ class Nglview extends Component {
         ligrep3: "none",
         ligrep4: "none",
         ligrepzn: "none",
+        ligrep1_table: "none",
+        ligrep2_table: "none",
+        ligrep3_table: "none",
+        ligrep4_table: "none",
+        ligrepzn_table: "none",
         store1: false,
         store2: false,
         store3: false,
         store4: false,
         storezn: false,
         pdbfile: [],
-        cma: []
+        cma: [],
+        selsetmetal: "none"
     };
 
     shouldComponentUpdate(nextProps, nextState) {
         console.log("NGLVIEW shoulddcomponentupdate 1--------------------------------");
         return true;
-          //return this.props.pdbfile !== nextProps.pdbfile
+        //return this.props.pdbfile !== nextProps.pdbfile
     }
+
+    setMetal = (event) => {
+        let cma = event.target.value;
+        console.log(event.target.value, event.target.name);
+        let rsmean = residueMean(this.props.pdbfile);
+        //let rsmeanvect = Object.keys(rsmeam).reduce((v, a) => {v.push({[a]:Object.values(a)})}, []);
+        //let rsmeanvobj= Object.keys(rsmeam).reduce((v, a) => (v[[a]]=Object.values(a)),{});
+        console.log(rsmean, cma, rsmean[cma]);
+        let nslist = findNearRes(this.props.pdbfile, [rsmean[cma]]);
+        console.log(cma, nslist);
+
+        this.setState({
+            ligrepzn_table: Object.keys(nslist[0])[0],
+            ligrepzn: Object.keys(nslist[0])[0].split(/\s/)[1],
+            ligrep1_table: Object.keys(nslist[1])[0],
+            ligrep1: Object.keys(nslist[1])[0].split(/\s/)[1],
+            ligrep2_table: Object.keys(nslist[2])[0],
+            ligrep2: Object.keys(nslist[2])[0].split(/\s/)[1],
+            ligrep3_table: Object.keys(nslist[3])[0],
+            ligrep3: Object.keys(nslist[3])[0].split(/\s/)[1],
+            ligrep4_table: Object.keys(nslist[4])[0],
+            ligrep4: Object.keys(nslist[4])[0].split(/\s/)[1],
+        });
+        console.log(this.state);
+        this.ligrepzn.setVisibility(true);
+        this.ligrepzn.setSelection(Object.keys(nslist[0])[0].split(/\s/)[1]);
+        this.ligrep1.setVisibility(true);
+        this.ligrep1.setSelection(Object.keys(nslist[1])[0].split(/\s/)[1]);
+        this.ligrep2.setVisibility(true);
+        this.ligrep2.setSelection(Object.keys(nslist[2])[0].split(/\s/)[1]);
+        this.ligrep3.setVisibility(true);
+        this.ligrep3.setSelection(Object.keys(nslist[3])[0].split(/\s/)[1]);
+        this.ligrep4.setVisibility(true);
+        this.ligrep4.setSelection(Object.keys(nslist[4])[0].split(/\s/)[1]);
+    };
 
     componentDidMount() {
         console.log("NGLVIEW didmount 1");
@@ -61,15 +107,21 @@ class Nglview extends Component {
 
         if (this.props.pdbfile.length > 0) {
             console.log("NGLVIEW didmount 2");
-           // this.setState({pdbfile: [...this.props.pdbfile]});
+            // this.setState({pdbfile: [...this.props.pdbfile]});
             // let pdblist = [...this.props.pdbfile];
             // let matrix = calcdistance(pdblist);
 
             let matrix = calcdistance(this.props.pdbfile);
             let cma = findMetal(this.props.pdbfile);
-            this.setState({cma: [...cma]});
             let rsmeam = residueMean(this.props.pdbfile);
-            let dist = calcDistanceFromPoint(rsmeam,[1,1,1]);
+            //let rsmeanvect = Object.keys(rsmeam).reduce((v, a) => {v.push({[a]:Object.values(a)})}, []);
+            let rsmeanvobj = Object.keys(rsmeam).reduce((v, a) => (v[[a]] = Object.values(a)), {});
+            console.log(cma, rsmeam, rsmeanvobj);
+            this.setState(
+                {cma: [...cma]});
+
+            console.log(this.state);
+            let dist = calcDistanceFromPoint(rsmeam, [1, 1, 1]);
             let slist = findMin(dist);
             console.log(cma);
             console.log([rsmeam[Object.keys(cma[0])[0]]]);
@@ -96,9 +148,10 @@ class Nglview extends Component {
                 console.log(dd.list[0].structure);
                 dd.list[0].addRepresentation("cartoon", {colorScheme: "atomindex"});
                 dd.list[0].structure.eachResidue(function (rp) {
-                  //  console.log(rp);
-                  //  console.log(o);
-                }, new NGL.Selection("polymer and :A"));
+                    //  console.log(rp);
+                    //  console.log(o);
+                // }, new NGL.Selection("polymer and :A"));
+                }, new NGL.Selection("polymer"));
                 dd.autoView();
                 console.log(dd);
                 console.log(dd.structure);
@@ -107,7 +160,7 @@ class Nglview extends Component {
                     colorValue: "gray",
                     sele: "none",
                     aspectRatio: 1.2,
-                    radiusScale: 2.5
+                    radiusScale: 5.0
                 };
                 let ballstickred = {
                     multipleBond: "symmetric",
@@ -153,6 +206,8 @@ class Nglview extends Component {
                 console.log(this.rep);
                 return "";
             };
+            let t = "ffff";
+            let r = `pippo ${t}`;
             this.rep = waitLoadNGL(this.stage);
         }
 
@@ -205,45 +260,50 @@ class Nglview extends Component {
     showLigandclickui = (resid, name) => {
         console.log(`Click nth(${resid}) row of parent, record.name: ${resid} ${name}`);
         console.log(this.state);
-      //  this.ligrep1.setVisibility(true);
-      //  this.ligrep1.setSelection(resid);
-        if(this.state.storezn){
+        //  this.ligrep1.setVisibility(true);
+        //  this.ligrep1.setSelection(resid);
+        if (this.state.storezn) {
             this.setState({
                 ...this.state,
                 storezn: false,
-                ligrepzn: resid
+                ligrepzn: resid,
+                ligrepzn_table: resid
             });
             this.ligrepzn.setVisibility(true);
             this.ligrepzn.setSelection(resid);
-        } else if(this.state.store1)  {
+        } else if (this.state.store1) {
             this.setState({
                 ...this.state,
                 store1: false,
-                ligrep1: resid
+                ligrep1: resid,
+                ligrep1_table: resid
             });
             this.ligrep1.setVisibility(true);
             this.ligrep1.setSelection(resid);
-        } else if(this.state.store2)  {
+        } else if (this.state.store2) {
             this.setState({
                 ...this.state,
                 store2: false,
-                ligrep2: resid
+                ligrep2: resid,
+                ligrep2_table: resid
             });
             this.ligrep2.setVisibility(true);
             this.ligrep2.setSelection(resid);
-        } else if(this.state.store3)  {
+        } else if (this.state.store3) {
             this.setState({
                 ...this.state,
                 store3: false,
-                ligrep3: resid
+                ligrep3: resid,
+                ligrep3_table: resid
             });
             this.ligrep3.setVisibility(true);
             this.ligrep3.setSelection(resid);
-        } else if(this.state.store4)  {
+        } else if (this.state.store4) {
             this.setState({
                 ...this.state,
                 store4: false,
-                ligrep4: resid
+                ligrep4: resid,
+                ligrep4_table: resid
             });
             this.ligrep4.setVisibility(true);
             this.ligrep4.setSelection(resid);
@@ -252,7 +312,7 @@ class Nglview extends Component {
         //ligandRepr.setSelection(sele);
     };
 
-    onmouseover =  (resid, name) => {
+    onmouseover = (resid, name) => {
         console.log(`Mouse Over nth(${resid}) row of parent, record.name: ${resid} ${name}`);
         console.log(this.state);
         this.ligrepover.setVisibility(true);
@@ -263,50 +323,50 @@ class Nglview extends Component {
     delselectlig = (lig) => {
         switch (lig) {
             case "1":
-                 this.setState({
+                this.setState({
                         ...this.state,
                         ligrep1: "none"
 
                     }
                 );
                 this.ligrep1.setVisibility(false);
-                 break;
+                break;
             case "2":
-                 this.setState({
+                this.setState({
                         ...this.state,
                         ligrep2: "none"
 
                     }
                 );
                 this.ligrep2.setVisibility(false);
-                 break;
+                break;
             case "3":
-                 this.setState({
+                this.setState({
                         ...this.state,
                         ligrep3: "none"
 
                     }
                 );
                 this.ligrep3.setVisibility(false);
-                 break;
+                break;
             case "4":
-                 this.setState({
+                this.setState({
                         ...this.state,
                         ligrep4: "none"
 
                     }
                 );
                 this.ligrep4.setVisibility(false);
-                 break;
+                break;
             case "zn":
-                 this.setState({
+                this.setState({
                         ...this.state,
                         ligrepzn: "none"
 
                     }
                 );
                 this.ligrepzn.setVisibility(false);
-                 break;
+                break;
             default:
                 return null;
 
@@ -318,36 +378,36 @@ class Nglview extends Component {
             case "1":
                 return this.setState({
                         ...this.state,
-                        ligrep1: "Clink ont table",
+                        ligrep1_rep: "Clink ont table",
                         store1: true
                     }
                 );
             case "2":
                 return this.setState({
                         ...this.state,
-                    ligrep2: "Clink ont table",
-                    store2: true
+                        ligrep2_rep: "Clink ont table",
+                        store2: true
                     }
                 );
             case "3":
                 return this.setState({
                         ...this.state,
-                    ligrep3: "Clink ont table",
-                    store3: true
+                        ligrep3_rep: "Clink ont table",
+                        store3: true
                     }
                 );
             case "4":
                 return this.setState({
                         ...this.state,
-                    ligrep4: "Clink ont table",
-                    store4: true
+                        ligrep4_rep: "Clink ont table",
+                        store4: true
                     }
                 );
             case "zn":
                 return this.setState({
                         ...this.state,
-                    ligrepzn: "Clink ont table",
-                    storezn: true
+                        ligrepzn_rep: "Clink ont table",
+                        storezn: true
                     }
                 );
             default:
@@ -389,22 +449,86 @@ class Nglview extends Component {
         dd.list[0].autoView()
 
     };
+    saveParameter = async() => {
+        let zip = new JSZip();
+        let ligs = [this.state.ligrep1_table, this.state.ligrep2_table,this.state.ligrep3_table,this.state.ligrep4_table];
+        console.log(ligs);
+        let ligs2 = ligs.map(a => a.split(/\s/).slice(0,2).join(" "));
+        let sostpdb =  this.props.pdbfile.map( a => {
 
-   /* componentWillReceiveProps(nextProps, nextContext) {
-    }*/
+            let rnum = a.substring(23, 26).trim();
+            let rname = a.substring(17, 20).trim();
+            //let aname = a.substring(12, 16).trim();
+            //console.log(cor,point[0]);
+            let key = rname + " " + rnum;
+            if ( ligs2.includes(key)){
+                let ret = a.replace("CYS", "CYZ").replace("HID", "HDZ").replace("HIE", "HEZ").replace("HIS", "HEZ");
+                console.log("Residues -> "+ret);
+                return ret;
+            } else {
+                return a;
+            }
+        });
+        console.log("-------SOSTPDB-----------");
+        console.log(sostpdb);
+
+        let pdbString = sostpdb.join("\n");
+
+        let arr = [];
+
+        let dataAmber = [];
+
+        let listretff = [];
+
+        arr.push(axios.get('http://localhost:8080/restzn/getFF')
+            .then((res) => {
+                console.log("RESPONSE RECEIVED: ", res);
+                console.log(res.data);
+                listretff = res.data.listretff;
+            })
+            .catch((err,res) => {
+                console.log("AXIOS ERROR: ", err.response);
+                // this.setState({loadingerror: [...err.response.data.infoout]})
+            }));
+
+
+        let result = await axios.all(arr);
+        console.log(result);
+        console.log("---------DOPO----------------");
+        console.log(listretff);
+        //console.log(this.props.pdbfile);
+
+        let dataAmberString = dataAmber.join("\n");
+        zip.folder("output").file("protein.pdb",  pdbString);
+        listretff.forEach( a => {
+            zip.file(a.filename.replace(".txt",".lib"),a.filecont);
+        });
+
+        zip.generateAsync({type:"blob"})
+            .then(function(content) {
+                // see FileSaver.js
+                saveAs(content, "ZnServer Parameter.zip");
+            });
+    };
+
+    /* componentWillReceiveProps(nextProps, nextContext) {
+     }*/
 
     render() {
+
+
         let printc = null;
         if (this.props.pdbfile.length > 0) {
             let pdbo = checkpdb(this.props.pdbfile);
             console.log(pdbo.chain);
             printc =
-                <Printchains chain={new Map(pdbo.chain)} over={this.state.resoverngl} tablemouseover={this.onmouseover} sclick={this.showLigandclickui}
+                <Printchains chain={new Map(pdbo.chain)} over={this.state.resoverngl} tablemouseover={this.onmouseover}
+                             sclick={this.showLigandclickui}
                              dclick={this.onRowDoubleClick}/>
         }
         let cma;
 
-        if(this.state.pdbfile.length > 0 ){
+        if (this.state.pdbfile.length > 0) {
             /*let matrix = calcdistance(this.state.pdbfile);
             let cma = findMetal(this.state.pdbfile);
             let rsmeam = residueMean(this.state.pdbfile);
@@ -417,21 +541,26 @@ class Nglview extends Component {
             console.log(dist);
             console.log(slist);*/
             cma = findMetal(this.state.pdbfile);
-            console.log("--------------ggggggg--------",cma);
+            console.log("--------------ggggggg--------", cma);
         }
         console.log("NGLVIEW from render");
         console.log(this.state);
         return (
             <div>
-                <div id="viewport" style={{width: '400px', height: '400px'}}/>
-                <button onClick={this.doetest}
+                <h1 className="errornglview"> PIPPO2</h1>
+                {/*<div id="viewport" style={{width: '400px', height: '400px'}}/>*/}
+                <div id="viewport" className="ngl"/>
+                <button  onClick={this.doetest}
                         className="btn btn-danger">view ball and stick
                 </button>
                 <button onClick={() => this.showLigand("10:A")}
                         className="btn btn-danger">view ligand
                 </button>
-                <button onClick={() => this.showLigand("30:A")}
+                <button
+                        onClick={() => this.showLigand("30:A")}
                         className="btn btn-danger">view ligand1
+                </button>
+                <button onClick={this.saveParameter} className="btn btn-danger" > Save Paramater
                 </button>
                 <button onClick={() => this.pippofun("-------PIPPO-------------")}
                         className="btn btn-danger">PIPPO
@@ -439,9 +568,12 @@ class Nglview extends Component {
                 <button onClick={() => this.pippofun("-------PIPPO-------------")}
                         className="btn btn-danger">{this.state.resoverngl}
                 </button>
-                <ParamTbale listMetal={this.state.cma} ligzn={this.state.ligrepzn} lig1={this.state.ligrep1} lig2={this.state.ligrep2}
-                lig3={this.state.ligrep3} lig4={this.state.ligrep4} delselectlig={this.delselectlig} selectlig={this.selectlig}/>
-                {printc}
+                <ParamTbale selsetmetal={this.state.selsetmetal} setmetal={this.setMetal} listMetal={this.state.cma}
+                            ligzn={this.state.ligrepzn_table} lig1={this.state.ligrep1_table}
+                            lig2={this.state.ligrep2_table}
+                            lig3={this.state.ligrep3_table} lig4={this.state.ligrep4_table}
+                            delselectlig={this.delselectlig} selectlig={this.selectlig}/>
+                {/*{printc}*/}
             </div>
         )
     }
