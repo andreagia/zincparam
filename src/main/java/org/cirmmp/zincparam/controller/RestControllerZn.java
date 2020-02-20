@@ -125,8 +125,13 @@ public class RestControllerZn {
         Retpdb retpdb = new Retpdb();
 
         if (downloadPDB.getFormat().equals("Amber")){
+            logger.info("RUN AMBER");
              retpdb = runamber2pdb.run(cutspdb);
+             logger.info("Return pdb INI");
+             retpdb.getPdbout().forEach( a -> logger.info(a));
+            logger.info("Return pdb END");
         } else if (downloadPDB.getFormat().equals("Gromacs")){
+            logger.info("RUN GROMACS");
             retpdb = runpdb2gmx.run(cutspdb);
         }
 
@@ -138,7 +143,7 @@ public class RestControllerZn {
         //downloadPDB.setPdbout(cutspdb);
         //downloadPDB.setPdbout(filepdblist);
        // return ResponseEntity.ok(HttpStatus.OK);
-        if(retpdb.getExitcode() == 0){
+        if(retpdb.getExitcode() == 100){
             return ResponseEntity.ok(downloadPDB);
         } else {
             return ResponseEntity.status(404).body(downloadPDB);

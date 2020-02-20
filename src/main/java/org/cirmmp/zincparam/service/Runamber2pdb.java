@@ -37,6 +37,11 @@ public class Runamber2pdb {
         List<String> infoout = new ArrayList<>();
 
         String generatedString = this.tmpdir + RandomStringUtils.randomAlphanumeric(10) + ".pdb";
+        logger.info("Input pdb");
+        logger.info(generatedString);
+        File file = new File(".");
+        logger.debug(file.getAbsolutePath());
+        //cutspdb.forEach(a -> logger.info(a) );
 
         Files.write(Paths.get(generatedString), cutspdb);
 
@@ -48,6 +53,7 @@ public class Runamber2pdb {
         envb.put("AMBERHOME", this.amberhome);
         envb.put("PYTHONPATH", this.amberhome + "/lib/python2.7/site-packages");
         processBuilder.command(cmdexe);
+        cmdexe.forEach(a -> logger.info(a));
 
         File dir = new File(this.tmpdir);
         if (!dir.exists()) dir.mkdirs();
@@ -68,13 +74,16 @@ public class Runamber2pdb {
                 new BufferedReader(new InputStreamReader(process.getErrorStream()));
         //delete temporaryfllr
 
-        Files.delete(Paths.get(generatedString));
+        //Files.delete(Paths.get(generatedString));
 
+        System.out.println("\nFINE ---------> : ");
         Retpdb retpdb = new Retpdb();
         retpdb.setExitcode(exitCode);
         retpdb.setPdbout(outpdb);
         retpdb.setInfoout(infoout);
 
+        outpdb.forEach(System.out::println);
+        infoout.forEach(System.out::println);
         return retpdb;
 
     }
