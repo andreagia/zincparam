@@ -32,6 +32,7 @@ public class Runamber2pdb {
     public Retpdb run(List<String> cutspdb) throws Exception {
 
 
+        logger.info("AMBERHOME:"+amberhome);
         List<String> outpdb = new ArrayList<>();
 
         List<String> infoout = new ArrayList<>();
