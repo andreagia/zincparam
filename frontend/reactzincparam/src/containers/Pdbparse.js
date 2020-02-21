@@ -38,7 +38,7 @@ class Pdbparse extends Component {
         this.setState({loading: true});
         console.log("----------- POSTDATA --------");
         console.log(downloadPDB.filepdb);
-        axios.post('http://ffmetal.cerm.unifi.it:8080/restzn/sendpdb', downloadPDB, axiosConfig)
+        axios.post('http://ffmetal.cerm.unifi.it/restzn/sendpdb', downloadPDB, axiosConfig)
         // axios.post('http://localhost:8080/restzn/sendpdb', downloadPDB, axiosConfig)
             .then((res) => {
                 console.log("RESPONSE RECEIVED: ", res);

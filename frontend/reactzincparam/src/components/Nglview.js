@@ -480,7 +480,7 @@ class Nglview extends Component {
 
         let listretff = [];
 
-        arr.push(axios.get('http://localhost:8080/restzn/getFF')
+        arr.push(axios.get('http://ffmetal.cerm.unifi.it/restzn/getFF')
             .then((res) => {
                 console.log("RESPONSE RECEIVED: ", res);
                 console.log(res.data);
