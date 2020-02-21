@@ -547,7 +547,7 @@ class Nglview extends Component {
         console.log(this.state);
         return (
             <div>
-                <h1 className="errornglview"> PIPPO2</h1>
+                <h1 className="errornglview"> FFMETAL</h1>
                 {/*<div id="viewport" style={{width: '400px', height: '400px'}}/>*/}
                 <div id="viewport" className="ngl"/>
                 <button  onClick={this.doetest}
