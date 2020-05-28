@@ -17,11 +17,10 @@ sudo a2enmod lbmethod_byrequests
 
 vi /etc/apache2/sites-available/000-default.conf
 
-""""
+
 <VirtualHost *:80>
     ProxyPreserveHost On
 
     ProxyPass / http://127.0.0.1:8080/
     ProxyPassReverse / http://127.0.0.1:8080/
 </VirtualHost>
-"""

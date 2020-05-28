@@ -1,0 +1,17 @@
+FORCE FIELD GENARAL 
+MASS
+OZ 16.00                      oxygen atom in glutamate and aspartate interacting with Zn(II)
+
+BOND
+C -OZ  656.0    1.250      
+
+ANGL
+CT-C -OZ    70.0      117.00
+OZ-C -OZ    80.0      126.00  
+ 
+DIHE
+X -OZ-C -O2         10.5         180.          2.           JCC,7,(1986),230
+X -O2-C -OZ         10.5         180.          2.           JCC,7,(1986),230
+
+NONB      AC
+OZ     1.7173    0.2100    
