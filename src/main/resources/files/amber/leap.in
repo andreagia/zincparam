@@ -1,0 +1,20 @@
+addAtomTypes {
+        { "NZ"  "N" "sp2" }
+        { "SZ"  "S" "sp3" }
+        { "NZ"  "N" "sp2" }
+        { "OZ"  "O" "sp2" }
+        }
+source leaprc.protein.ff14SB
+loadAmberPrep CYZHDZHEZ.in
+loadAmberPrep GLUASP.in
+loadamberparams parmZn.dat
+loadamberparams parmZn-gluasp.dat
+
+sa0 = loadPdb STARTnoW.pdb
+
+aveAmberParm sa0 prmtop inpcrd
+
+savepdb sa0 leap_out.pdb
+charge sa0
+check sa0
+quit
