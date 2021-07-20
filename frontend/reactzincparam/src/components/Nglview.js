@@ -562,12 +562,12 @@ class Nglview extends Component {
                 </button>
                 <button onClick={this.saveParameter} className="btn btn-danger" > Save Paramater
                 </button>
-                <button onClick={() => this.pippofun("-------PIPPO-------------")}
-                        className="btn btn-danger">PIPPO
-                </button>
-                <button onClick={() => this.pippofun("-------PIPPO-------------")}
-                        className="btn btn-danger">{this.state.resoverngl}
-                </button>
+                {/*<button onClick={() => this.pippofun("-------PIPPO-------------")}*/}
+                {/*        className="btn btn-danger">PIPPO*/}
+                {/*</button>*/}
+                {/*<button onClick={() => this.pippofun("-------PIPPO-------------")}*/}
+                {/*        className="btn btn-danger">{this.state.resoverngl}*/}
+                {/*</button>*/}
                 <ParamTbale selsetmetal={this.state.selsetmetal} setmetal={this.setMetal} listMetal={this.state.cma}
                             ligzn={this.state.ligrepzn_table} lig1={this.state.ligrep1_table}
                             lig2={this.state.ligrep2_table}
