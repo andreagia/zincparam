@@ -1,5 +1,6 @@
 package org.cirmmp.zincparam.controller;
 
+
 import org.cirmmp.zincparam.model.DownloadPDB;
 import org.cirmmp.zincparam.model.ListRetFF;
 import org.cirmmp.zincparam.model.RetFF;
@@ -15,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -68,7 +71,10 @@ public class RestControllerZn {
             Resource expect = new ClassPathResource("files/amber/" + filein);
             retff.setFilename(filein);
             try {
-                List<String> fffile = Files.readAllLines(Paths.get(expect.getFile().getAbsolutePath()));
+                InputStream inputStream = expect.getInputStream();
+                List<String> fffile = org.apache.commons.io.IOUtils.readLines(inputStream, "UTF-8");
+               // String text = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+                //List<String> fffile = Files.readAllLines(Paths.get(expect.getFile().getAbsolutePath()));
                 retff.setFilecont(fffile);
                 retff.setExitcode(0);
 
