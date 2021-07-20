@@ -11,7 +11,7 @@
     <groupId>org.cirmmp</groupId>
     <artifactId>zincparam</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+<!--    <packaging>war</packaging>-->
     <name>Zinc Parameter Creator</name>
     <description>Zinc parameter creation with Amber Spring Boot - reactjs</description>
 
