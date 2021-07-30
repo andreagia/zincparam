@@ -73,6 +73,7 @@ public class RestControllerZn {
             try {
                 InputStream inputStream = expect.getInputStream();
                 List<String> fffile = org.apache.commons.io.IOUtils.readLines(inputStream, "UTF-8");
+                fffile.forEach(System.out::println);
                // String text = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
                 //List<String> fffile = Files.readAllLines(Paths.get(expect.getFile().getAbsolutePath()));
                 retff.setFilecont(fffile);
