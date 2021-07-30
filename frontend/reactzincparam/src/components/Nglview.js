@@ -502,7 +502,7 @@ class Nglview extends Component {
         zip.folder("output").file("protein.pdb",  pdbString);
         console.log(pdbString);
         listretff.forEach( a => {
-            zip.file(a.filename.replace(".txt",".lib"),a.filecont);
+            zip.file(a.filename.replace(".txt",".lib"),a.filecont.join("\n"));
         });
 
         zip.generateAsync({type:"blob"})
