@@ -36,8 +36,9 @@ public class Runamber2pdb {
         List<String> outpdb = new ArrayList<>();
 
         List<String> infoout = new ArrayList<>();
-
-        String generatedString = this.tmpdir + RandomStringUtils.randomAlphanumeric(10) + ".pdb";
+        String randomstring =  RandomStringUtils.randomAlphanumeric(10);
+        String generatedString = this.tmpdir + randomstring+ ".pdb";
+        String pdbgeneratedString = randomstring+ ".pdb";
         logger.info("Input pdb");
         logger.info(generatedString);
         File file = new File(".");
@@ -47,7 +48,8 @@ public class Runamber2pdb {
         Files.write(Paths.get(generatedString), cutspdb);
 
         //List<String> cmdexe = Arrays.asList("/bin/bash", "/Users/andrea/runpdb4amb.bash" );
-        List<String> cmdexe = Arrays.asList(this.amberhome + "/bin/pdb4amber", generatedString);
+        //List<String> cmdexe = Arrays.asList(this.amberhome + "/bin/pdb4amber", generatedString);
+        List<String> cmdexe = Arrays.asList("docker", "run", "-it", "-v",this.tmpdir+":/work", "ambertoolsconda", "pdb4amber", pdbgeneratedString);
         //List<String> cmdexe = Arrays.asList("/bin/sh","-c","ls ..");
         ProcessBuilder processBuilder = new ProcessBuilder();
         Map<String, String> envb = processBuilder.environment();
