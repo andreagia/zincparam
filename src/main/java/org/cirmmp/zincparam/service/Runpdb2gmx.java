@@ -49,14 +49,19 @@ public class Runpdb2gmx {
 
         List<String> infoout = new ArrayList<>();
 
-        String generatedString = this.tmpdir + RandomStringUtils.randomAlphanumeric(10);
+        String generatedStringrandom =  RandomStringUtils.randomAlphanumeric(10);
+        String generatedString = this.tmpdir + generatedStringrandom;
 
         Files.write(Paths.get(generatedString + ".pdb"), cutspdb);
 
         //List<String> cmdexe = Arrays.asList("/bin/bash", "/Users/andrea/runpdb4amb.bash" );
-        List<String> cmdexe = Arrays.asList("/usr/bin/expect", "script.exp", generatedString, generatedString+"_out" );
+        List<String> cmdexe = Arrays.asList("docker", "run", "-v",this.tmpdir+":/work", "gromacsexpect", "/usr/bin/expect", "script.exp", generatedStringrandom, generatedStringrandom+"_out");
+
+        //List<String> cmdexe = Arrays.asList("/usr/bin/expect", "script.exp", generatedString, generatedString+"_out" );
         //List<String> cmdexe = Arrays.asList("gmx","pdb2gmx", "-f",generatedString,"-o",generatedString+".gro","-water","none","-q",generatedString+".pdb");
         //List<String> cmdexe = Arrays.asList("/bin/sh","-c","ls ..");
+        cmdexe.forEach(a -> logger.info(a));
+        logger.info(String.join(" ", cmdexe));
         ProcessBuilder processBuilder = new ProcessBuilder();
 
         processBuilder.command(cmdexe);

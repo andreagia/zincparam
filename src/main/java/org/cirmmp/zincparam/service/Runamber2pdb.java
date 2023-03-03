@@ -57,6 +57,7 @@ public class Runamber2pdb {
         envb.put("PYTHONPATH", this.amberhome + "/lib/python2.7/site-packages");
         processBuilder.command(cmdexe);
         cmdexe.forEach(a -> logger.info(a));
+        logger.info(String.join(" ", cmdexe));
 
         File dir = new File(this.tmpdir);
         if (!dir.exists()) dir.mkdirs();

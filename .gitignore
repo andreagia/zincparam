@@ -73,3 +73,7 @@ secrets.yml
 
 .idea
 .n
+*.bz2
+*.tar
+package-lock.json
+Miniconda*

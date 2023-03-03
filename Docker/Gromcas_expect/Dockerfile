@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 gromacs/gromacs
+FROM --platform=linux/amd64 gromacs/gromacs:2022.2
 
 #MAINTAINER Andrea Giachetti <Giachetti@cerm.unifi.it>
 #LABEL description="Container image to run ambertools with sander MPI"

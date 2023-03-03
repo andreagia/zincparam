@@ -2,9 +2,11 @@ import * as math from 'mathjs';
 const residueMean = (pdb) => {
 
     let filter1 = pdb.filter(a => a.match(/^(ATOM|HETATM)/) && !a.match(/HOH/));
+    //console.log(filter1);
     let acc = filter1.reduce((v, a)=> {
-        let rnum = a.substring(23, 26).trim();
+        let rnum = a.substring(22, 26).trim();
         let rname = a.substring(17, 20).trim();
+        if(rname==="ZN") console.log(a);
         let key = rname + " " + rnum;
         if (key in v) {
             v[key].push(a.substring(30, 54).split(/\s/).filter(Number).map(Number));
