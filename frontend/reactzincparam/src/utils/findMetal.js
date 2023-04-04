@@ -5,7 +5,8 @@ const findMetal = (pdb) => {
     let vect= filter1.reduce((v, a)=> {
         let rnum = a.substring(23, 26).trim();
         let rname = a.substring(17, 20).trim();
-        let key = rname + " " + rnum;
+        let chain = a.substring(21, 22).trim();
+        let key = rname + " " + rnum + chain;
         if (key in v) {
             v[key]= v[key]+1;
         } else {
