@@ -5,9 +5,10 @@ import { connect } from 'react-redux';
 import * as actionTypes from  '../components/store/action'
 import axios from "axios";
 import Modal from '../components/UI/modal/Modal'
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
+import {Select, InputLabel, MenuItem  } from  '@mui/material'
+//import Select from '@material-ui/core/Select';
+//import InputLabel from '@material-ui/core/InputLabel';
+//import MenuItem from '@material-ui/core/MenuItem';
 
 class Pdbparse extends Component {
     state = {
@@ -16,7 +17,6 @@ class Pdbparse extends Component {
         loadingerror: false,
         format: "Amber"
     };
-
 
     checkpdbinput = (pdb) => {
 
@@ -108,7 +108,7 @@ class Pdbparse extends Component {
 
 const mapStateToProps = state => {
     return {
-       pdb: state.pdb,
+        pdb: state.pdb,
         pdbc: state.pdbc
     }
 };

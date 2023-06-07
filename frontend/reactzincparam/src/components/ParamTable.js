@@ -1,23 +1,26 @@
 import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import NavigationIcon from '@material-ui/icons/Navigation';
-import Button from '@material-ui/core/Button';
-import IconButton from "@material-ui/core/IconButton";
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
+//migrating https://dev.to/atonchev/material-ui-5-the-easiest-way-to-migrate-from-makestyles-to-emotion-1i9l
+//import {makeStyles} from '@material-ui/core/styles';
+import {Table, TableBody, TableCell, TableHead, TableRow, Paper, InputLabel, MenuItem, Select  } from  '@mui/material'
+import classNames from 'classnames/bind';
+//import Table from '@material-ui/core/Table';
+//import TableBody from '@material-ui/core/TableBody';
+//import TableCell from '@material-ui/core/TableCell';
+//import TableHead from '@material-ui/core/TableHead';
+//import TableRow from '@material-ui/core/TableRow';
+//import Paper from '@material-ui/core/Paper';
+//import Fab from '@material-ui/core/Fab';
+//import AddIcon from '@material-ui/icons/Add';
+//import EditIcon from '@material-ui/icons/Edit';
+//import DeleteIcon from '@material-ui/icons/Delete';
+//import NavigationIcon from '@material-ui/icons/Navigation';
+//import Button from '@material-ui/core/Button';
+//import IconButton from "@material-ui/core/IconButton";
+//import InputLabel from '@material-ui/core/InputLabel';
+//import MenuItem from "@material-ui/core/MenuItem";
+//import Select from "@material-ui/core/Select";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = theme => ({
     root: {
         marginTop: "auto",
         marginLeft: "auto",
@@ -59,11 +62,11 @@ const useStyles = makeStyles(theme => ({
     pad: {
         padding: "10px"
     }
-}));
+});
 
 
 const ParamTabale = (props) => {
-    const classes = useStyles();
+    const classes = classNames(useStyles);
     const click = () => {
         console.log("Cliccked");
     };

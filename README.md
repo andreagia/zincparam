@@ -1,5 +1,5 @@
 ## install
-RUN git clone https://oneservice.cerm.unifi.it/andrea/zincparamwebservice.git
+RUN git clone https://github.com/andreagia/zincparam.git
 RUN cd zincparamwebservice
 WORKDIR /zincparamwebservice
 RUN mvn package

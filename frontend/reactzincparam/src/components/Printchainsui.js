@@ -1,13 +1,15 @@
 import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import {Table, TableBody, TableCell, TableHead, TableRow, Paper, InputLabel, MenuItem  } from  '@mui/material'
+import classNames from 'classnames/bind';
+//import {makeStyles} from '@material-ui/core/styles';
+//import Table from '@material-ui/core/Table';
+//import TableBody from '@material-ui/core/TableBody';
+//import TableCell from '@material-ui/core/TableCell';
+//import TableHead from '@material-ui/core/TableHead';
+//import TableRow from '@material-ui/core/TableRow';
+//import Paper from '@material-ui/core/Paper';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = theme => ({
     root: {
         width: '60%',
     },
@@ -26,12 +28,12 @@ const useStyles = makeStyles(theme => ({
     tableRow1: {
         backgroundColor: "red"
     }
-}));
+});
 
 
 const Printchainsui = (props) => {
 
-    const classes = useStyles();
+    const classes = classNames(useStyles);
 
     function createData(name, resid) {
         return {name, resid};
