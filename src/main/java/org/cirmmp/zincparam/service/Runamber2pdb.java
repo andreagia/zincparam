@@ -12,11 +12,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class Runamber2pdb {
@@ -33,12 +33,14 @@ public class Runamber2pdb {
 
 
         logger.info("AMBERHOME:"+amberhome);
-        List<String> outpdb = new ArrayList<>();
+        //List<String> outpdb = new ArrayList<>();
 
         List<String> infoout = new ArrayList<>();
         String randomstring =  RandomStringUtils.randomAlphanumeric(10);
         String generatedString = this.tmpdir + randomstring+ ".pdb";
         String pdbgeneratedString = randomstring+ ".pdb";
+        String pdboutgeneratedString = randomstring+ "_out.pdb";
+        String filepdboutgeneratedString =  this.tmpdir + randomstring+ "_out.pdb";
         logger.info("Input pdb");
         logger.info(generatedString);
         File file = new File(".");
@@ -49,7 +51,8 @@ public class Runamber2pdb {
 
         //List<String> cmdexe = Arrays.asList("/bin/bash", "/Users/andrea/runpdb4amb.bash" );
         //List<String> cmdexe = Arrays.asList(this.amberhome + "/bin/pdb4amber", generatedString);
-        List<String> cmdexe = Arrays.asList("docker", "run", "-it", "-v",this.tmpdir+":/work", "ambertoolsconda", "pdb4amber", pdbgeneratedString);
+        List<String> cmdexe = Arrays.asList("docker", "run", "-v",this.tmpdir+":/work", "ambertoolsconda",
+                "pdb4amber", "-i" ,pdbgeneratedString, "-o", pdboutgeneratedString);
         //List<String> cmdexe = Arrays.asList("/bin/sh","-c","ls ..");
         ProcessBuilder processBuilder = new ProcessBuilder();
         Map<String, String> envb = processBuilder.environment();
@@ -66,20 +69,20 @@ public class Runamber2pdb {
 
         //processBuilder.directory(new File(System.getProperty("user.home")));
 
-        int exitCode = 100;
+       //int exitCode = 100;
         Process process = processBuilder.start();
+        Scanner sc = new Scanner(process.getErrorStream());
+       while (sc.hasNext()) {
+         System.out.println(sc.nextLine());
+       }
+
 
         System.out.println("\nPartito ---------> : ");
-        // blocked :(
-        BufferedReader reader =
-                new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-        BufferedReader errorreader =
-                new BufferedReader(new InputStreamReader(process.getErrorStream()));
-        //delete temporaryfllr
-
-        //Files.delete(Paths.get(generatedString));
-
+        int exitCode = process.waitFor();
+        System.out.println(exitCode);
+        List<String> outpdb = Files.readAllLines(Paths.get(filepdboutgeneratedString));
+        exitCode = process.waitFor();
         System.out.println("\nFINE ---------> : ");
         Retpdb retpdb = new Retpdb();
         retpdb.setExitcode(exitCode);

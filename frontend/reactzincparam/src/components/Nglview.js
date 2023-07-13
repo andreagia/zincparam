@@ -116,7 +116,9 @@ class Nglview extends Component {
             let rsmeam = residueMean(this.props.pdbfile);
             //let rsmeanvect = Object.keys(rsmeam).reduce((v, a) => {v.push({[a]:Object.values(a)})}, []);
             let rsmeanvobj = Object.keys(rsmeam).reduce((v, a) => (v[[a]] = Object.values(a)), {});
+            console.log(Object.keys(rsmeam));
             console.log(cma, rsmeam, rsmeanvobj);
+            //console.log(rsmeanvect);
             this.setState(
                 {cma: [...cma]});
 

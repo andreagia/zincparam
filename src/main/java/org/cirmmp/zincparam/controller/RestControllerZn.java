@@ -1,6 +1,7 @@
 package org.cirmmp.zincparam.controller;
 
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.cirmmp.zincparam.model.DownloadPDB;
 import org.cirmmp.zincparam.model.ListRetFF;
 import org.cirmmp.zincparam.model.RetFF;
@@ -14,7 +15,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletRequest;
+//import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -142,7 +143,7 @@ public class RestControllerZn {
             retpdb = runpdb2gmx.run(cutspdb);
         }
 
-        logger.info("------ OUTPDB  -------");
+        logger.info("------ OUTPDB  ------- Exit Code {}",retpdb.getExitcode());
         //outpdb.forEach(a -> logger.info(a));
         //System.out.println(this.tmpdir);
         downloadPDB.setPdbout(retpdb.getPdbout());
@@ -150,7 +151,7 @@ public class RestControllerZn {
         //downloadPDB.setPdbout(cutspdb);
         //downloadPDB.setPdbout(filepdblist);
        // return ResponseEntity.ok(HttpStatus.OK);
-        if(retpdb.getExitcode() == 100){
+        if(retpdb.getExitcode() == 0){
             return ResponseEntity.ok(downloadPDB);
         } else {
             return ResponseEntity.status(404).body(downloadPDB);
