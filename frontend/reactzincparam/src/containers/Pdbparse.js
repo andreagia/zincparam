@@ -52,7 +52,7 @@ class Pdbparse extends Component {
         console.log(downloadPDB.filepdb);
         let urls ='http://ffmetal.cerm.unifi.it/restzn/sendpdb'
         if (process.env.REACT_APP_DEV === "true") {
-            urls = 'http://localhost:8080/restzn/sendpdb';
+            urls = 'http://localhost:8087/restzn/sendpdb';
             console.log(" URLS DEVELOPERS");
         }
         console.log(process.env.REACT_APP_DEV);

@@ -496,7 +496,7 @@ class Nglview extends Component {
         console.log(process.env.REACT_APP_PROD)
         let urls ='http://ffmetal.cerm.unifi.it/restzn/getFF'
         if (process.env.REACT_APP_DEV === 'true') {
-            urls = 'http://localhost:8080/restzn/getFF';
+            urls = 'http://localhost:8087/restzn/getFF';
             console.log(" URLS DEVELOPERS");
         }
         arr.push(axios.get(urls)
