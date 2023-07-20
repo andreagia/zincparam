@@ -1,7 +1,7 @@
 import React from 'react';
 //migrating https://dev.to/atonchev/material-ui-5-the-easiest-way-to-migrate-from-makestyles-to-emotion-1i9l
 //import {makeStyles} from '@material-ui/core/styles';
-import {Table, TableBody, TableCell, TableHead, TableRow, Paper, InputLabel, MenuItem, Select  } from  '@mui/material'
+import {Table, TableBody, TableCell, TableHead, TableRow, Paper, InputLabel, MenuItem, Select, Grid  } from  '@mui/material'
 import classNames from 'classnames/bind';
 //import Table from '@material-ui/core/Table';
 //import TableBody from '@material-ui/core/TableBody';
@@ -87,6 +87,7 @@ const ParamTabale = (props) => {
             <Fab size="small" color="secondary" aria-label="edit" className={classes.fab}>
                 <DeleteIcon fontSize="small"/>
             </Fab>*/}
+            <Grid item>
             <Paper className={classes.root}>
                 <Table className={classes.table}>
                     <TableHead>
@@ -196,6 +197,7 @@ const ParamTabale = (props) => {
                     </TableBody>
                 </Table>
             </Paper>
+                </Grid>
         </div>
 
     )

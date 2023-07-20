@@ -6,8 +6,9 @@ const residueMean = (pdb) => {
     let acc = filter1.reduce((v, a)=> {
         let rnum = a.substring(22, 26).trim();
         let rname = a.substring(17, 20).trim();
+        let chain = a.substring(21, 22).trim();
         if(rname==="ZN") console.log(a);
-        let key = rname + " " + rnum;
+        let key = rname + " " + rnum + chain;
         if (key in v) {
             v[key].push(a.substring(30, 54).split(/\s/).filter(Number).map(Number));
         } else {

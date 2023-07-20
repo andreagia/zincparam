@@ -14,6 +14,10 @@ import { saveAs } from 'file-saver';
 import axios from "axios";
 //import * as math from "mathjs/es/entry/impureFunctionsAny.generated";
 import  './Nglview.css';
+import {
+    Button, Grid, ButtonGroup,
+    Typography
+} from '@mui/material'
 
 class Nglview extends Component {
     stage = null;
@@ -60,6 +64,8 @@ class Nglview extends Component {
         console.log(rsmean, cma, rsmean[cma]);
         let nslist = findNearRes(this.props.pdbfile, [rsmean[cma]]);
         console.log(cma, nslist);
+        console.log(Object.keys(nslist[0])[0]);
+        console.log(Object.keys(nslist[1])[0]);
 
         this.setState({
             ligrepzn_table: Object.keys(nslist[0])[0],
@@ -73,7 +79,6 @@ class Nglview extends Component {
             ligrep4_table: Object.keys(nslist[4])[0],
             ligrep4: Object.keys(nslist[4])[0].split(/\s/)[1],
         });
-        console.log(this.state);
         this.ligrepzn.setVisibility(true);
         this.ligrepzn.setSelection(Object.keys(nslist[0])[0].split(/\s/)[1]);
         this.ligrep1.setVisibility(true);
@@ -118,14 +123,18 @@ class Nglview extends Component {
             let rsmeanvobj = Object.keys(rsmeam).reduce((v, a) => (v[[a]] = Object.values(a)), {});
             console.log(Object.keys(rsmeam));
             console.log(cma, rsmeam, rsmeanvobj);
-            //console.log(rsmeanvect);
+            console.table(rsmeam);
             this.setState(
-                {cma: [...cma]});
+                {cma: [...cma]}
+            );
 
             console.log(this.state);
             let dist = calcDistanceFromPoint(rsmeam, [1, 1, 1]);
             let slist = findMin(dist);
             console.log(cma);
+            console.log(cma[0]);
+            console.log(Object.keys(cma[0]));
+            console.log(rsmeam[Object.keys(cma[0])]);
             console.log([rsmeam[Object.keys(cma[0])[0]]]);
             let nslist = findNearRes(this.props.pdbfile, [rsmeam[Object.keys(cma[0])[0]]]);
 
@@ -454,7 +463,8 @@ class Nglview extends Component {
     saveParameter = async() => {
         let zip = new JSZip();
         let ligs = [this.state.ligrep1_table, this.state.ligrep2_table,this.state.ligrep3_table,this.state.ligrep4_table];
-        console.log(ligs);
+        console.log("SAVEPARAMETR")
+        console.table(ligs);
         let ligs2 = ligs.map(a => a.split(/\s/).slice(0,2).join(" "));
         let sostpdb =  this.props.pdbfile.map( a => {
 
@@ -471,8 +481,8 @@ class Nglview extends Component {
                 return a;
             }
         });
-        console.log("-------SOSTPDB-----------");
-        console.log(sostpdb);
+        //console.log("-------SOSTPDB-----------");
+        //console.log(sostpdb);
 
         let pdbString = sostpdb.join("\n");
 
@@ -482,7 +492,15 @@ class Nglview extends Component {
 
         let listretff = [];
 
-        arr.push(axios.get('http://ffmetal.cerm.unifi.it/restzn/getFF')
+        console.log("VARIABILE----------------")
+        console.log(process.env.REACT_APP_PROD)
+        let urls ='http://ffmetal.cerm.unifi.it/restzn/getFF'
+        if (process.env.REACT_APP_DEV === 'true') {
+            urls = 'http://localhost:8080/restzn/getFF';
+            console.log(" URLS DEVELOPERS");
+        }
+        arr.push(axios.get(urls)
+        //arr.push(axios.get('http://ffmetal.cerm.unifi.it/restzn/getFF')
             .then((res) => {
                 console.log("RESPONSE RECEIVED: ", res);
                 console.log(res.data);
@@ -549,22 +567,31 @@ class Nglview extends Component {
         console.log("NGLVIEW from render");
         console.log(this.state);
         return (
-            <div>
-                <h1 className="errornglview"> FFMETAL</h1>
+           <div>
+                <Grid item >
+                <Typography variant="h2"> FFMETAL </Typography>
+                  </Grid>
                 {/*<div id="viewport" style={{width: '400px', height: '400px'}}/>*/}
+               <Grid item>
                 <div id="viewport" className="ngl"/>
-                <button  onClick={this.doetest}
+               </Grid>
+               <Grid item>
+                    <ButtonGroup>
+                <Button variant="contained"  spacing={3} onClick={this.doetest}
                         className="btn btn-danger">view ball and stick
-                </button>
-                <button onClick={() => this.showLigand("10:A")}
+                </Button>
+                <Button variant="contained" spacing={3} onClick={() => this.showLigand("10:A")}
                         className="btn btn-danger">view ligand
-                </button>
-                <button
+                </Button>
+                <Button
+                    variant="contained" spacing={3}
                         onClick={() => this.showLigand("30:A")}
                         className="btn btn-danger">view ligand1
-                </button>
-                <button onClick={this.saveParameter} className="btn btn-danger" > Save Paramater
-                </button>
+                </Button>
+                <Button variant="contained" spacing={2} onClick={this.saveParameter} className="btn btn-danger" > Save Paramater
+                </Button>
+                    </ButtonGroup>
+                   </Grid>
                 {/*<button onClick={() => this.pippofun("-------PIPPO-------------")}*/}
                 {/*        className="btn btn-danger">PIPPO*/}
                 {/*</button>*/}
