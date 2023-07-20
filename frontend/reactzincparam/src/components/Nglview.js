@@ -494,7 +494,7 @@ class Nglview extends Component {
 
         console.log("VARIABILE----------------")
         console.log(process.env.REACT_APP_PROD)
-        let urls ='http://ffmetal.cerm.unifi.it/restzn/getFF'
+        let urls ='https://ffmetal.cerm.unifi.it/restzn/getFF'
         if (process.env.REACT_APP_DEV === 'true') {
             urls = 'http://localhost:8087/restzn/getFF';
             console.log(" URLS DEVELOPERS");
