@@ -51,7 +51,7 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "http://localhost:8080/frontend",
+  "homepage": "http://localhost:8087/frontend",
   "devDependencies": {
     "@types/file-saver": "^2.0.1",
     "css-loader": "^3.2.0",
