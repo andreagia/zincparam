@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"https://ffmetal.cerm.unifi.it/", "http://localhost:3000"})
 @RequestMapping(path = "/restzn")
 public class RestControllerZn {
 
