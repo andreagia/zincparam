@@ -1,5 +1,6 @@
 package org.cirmmp.zincparam.service;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.cirmmp.zincparam.model.Retpdb;
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,20 +34,21 @@ public class Runpdb2gmx {
     public Retpdb run(List<String> cutspdb) throws Exception {
 
         Resource expect = new ClassPathResource("script/script.exp");
-        String expectfile = expect.getFilename();
+        InputStream expectfile = expect.getInputStream();
 
         logger.info("GROMCAS Resources");
-        logger.info(expectfile);
+        //logger.info(expectfile);
         //InputStream input = resource.getInputStream();
 
         File dir = new File(this.tmpdir);
         if (!dir.exists()) dir.mkdirs();
 
-        File file_expectS = expect.getFile();
+        //File file_expectS = expect.getFile();
         File file_expectD = new File(tmpdir + "script.exp");
 
         if (!file_expectD.exists()) {
-            Files.copy(file_expectS.toPath(), file_expectD.toPath());
+            //Files.copy(file_expectS.toPath(), file_expectD.toPath());
+            FileUtils.copyInputStreamToFile(expectfile,file_expectD);
         }
 
         List<String> outpdb = new ArrayList<>();
