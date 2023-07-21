@@ -15,6 +15,7 @@ WORKDIR /root
 RUN bash Miniconda3-py310_23.1.0-1-Linux-x86_64.sh -b -p /opt/conda
 ENV PATH=$CONDA_DIR/bin:$PATH
 RUN  conda install -y -c conda-forge ambertools
+RUN pip install pdb4amber
 RUN pip install parmed
 RUN pip install numpy
 RUN mkdir /work
