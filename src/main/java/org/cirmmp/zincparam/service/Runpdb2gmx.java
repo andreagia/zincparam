@@ -32,8 +32,10 @@ public class Runpdb2gmx {
     public Retpdb run(List<String> cutspdb) throws Exception {
 
         Resource expect = new ClassPathResource("script/script.exp");
+        String expectfile = expect.getFilename();
 
         logger.info("GROMCAS Resources");
+        logger.info(expectfile);
         //InputStream input = resource.getInputStream();
 
         File dir = new File(this.tmpdir);
