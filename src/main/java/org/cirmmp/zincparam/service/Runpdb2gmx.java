@@ -33,6 +33,7 @@ public class Runpdb2gmx {
 
         Resource expect = new ClassPathResource("script/script.exp");
 
+        logger.info("GROMCAS Resources");
         //InputStream input = resource.getInputStream();
 
         File dir = new File(this.tmpdir);
